@@ -1,0 +1,7 @@
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.csproj.AssemblyReference.cache
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.AssemblyInfoInputs.cache
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.AssemblyInfo.cs
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.csproj.CoreCompileInputs.cache
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\WebApplication\obj\Debug\net6.0\WebApplication.MvcApplicationPartsAssemblyInfo.cache
