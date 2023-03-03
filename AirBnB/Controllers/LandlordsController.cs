@@ -13,9 +13,9 @@ namespace AirBnB.Controllers
     [ApiController]
     public class LandlordsController : ControllerBase
     {
-        private readonly AirbnbContext _context;
+        private readonly AirBnBContext _context;
 
-        public LandlordsController(AirbnbContext context)
+        public LandlordsController(AirBnBContext context)
         {
             _context = context;
         }

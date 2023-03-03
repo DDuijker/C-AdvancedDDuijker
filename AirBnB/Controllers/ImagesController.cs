@@ -11,47 +11,47 @@ namespace AirBnB.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LocationsController : ControllerBase
+    public class ImagesController : ControllerBase
     {
         private readonly AirBnBContext _context;
 
-        public LocationsController(AirBnBContext context)
+        public ImagesController(AirBnBContext context)
         {
             _context = context;
         }
 
-        // GET: api/Locations
+        // GET: api/Images
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+        public async Task<ActionResult<IEnumerable<Image>>> GetImages()
         {
-            return await _context.Locations.ToListAsync();
+            return await _context.Images.ToListAsync();
         }
 
-        // GET: api/Locations/5
+        // GET: api/Images/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Location>> GetLocation(int id)
+        public async Task<ActionResult<Image>> GetImage(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var image = await _context.Images.FindAsync(id);
 
-            if (location == null)
+            if (image == null)
             {
                 return NotFound();
             }
 
-            return location;
+            return image;
         }
 
-        // PUT: api/Locations/5
+        // PUT: api/Images/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocation(int id, Location location)
+        public async Task<IActionResult> PutImage(int id, Image image)
         {
-            if (id != location.LocationId)
+            if (id != image.ImageId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(location).State = EntityState.Modified;
+            _context.Entry(image).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace AirBnB.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LocationExists(id))
+                if (!ImageExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace AirBnB.Controllers
             return NoContent();
         }
 
-        // POST: api/Locations
+        // POST: api/Images
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
+        public async Task<ActionResult<Image>> PostImage(Image image)
         {
-            _context.Locations.Add(location);
+            _context.Images.Add(image);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLocation", new { id = location.LocationId }, location);
+            return CreatedAtAction("GetImage", new { id = image.ImageId }, image);
         }
 
-        // DELETE: api/Locations/5
+        // DELETE: api/Images/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(int id)
+        public async Task<IActionResult> DeleteImage(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
+            var image = await _context.Images.FindAsync(id);
+            if (image == null)
             {
                 return NotFound();
             }
 
-            _context.Locations.Remove(location);
+            _context.Images.Remove(image);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool LocationExists(int id)
+        private bool ImageExists(int id)
         {
-            return _context.Locations.Any(e => e.LocationId == id);
+            return _context.Images.Any(e => e.ImageId == id);
         }
     }
 }

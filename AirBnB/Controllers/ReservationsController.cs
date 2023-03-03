@@ -11,47 +11,47 @@ namespace AirBnB.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class LocationsController : ControllerBase
+    public class ReservationsController : ControllerBase
     {
         private readonly AirBnBContext _context;
 
-        public LocationsController(AirBnBContext context)
+        public ReservationsController(AirBnBContext context)
         {
             _context = context;
         }
 
-        // GET: api/Locations
+        // GET: api/Reservations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
         {
-            return await _context.Locations.ToListAsync();
+            return await _context.Reservations.ToListAsync();
         }
 
-        // GET: api/Locations/5
+        // GET: api/Reservations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Location>> GetLocation(int id)
+        public async Task<ActionResult<Reservation>> GetReservation(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var reservation = await _context.Reservations.FindAsync(id);
 
-            if (location == null)
+            if (reservation == null)
             {
                 return NotFound();
             }
 
-            return location;
+            return reservation;
         }
 
-        // PUT: api/Locations/5
+        // PUT: api/Reservations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocation(int id, Location location)
+        public async Task<IActionResult> PutReservation(int id, Reservation reservation)
         {
-            if (id != location.LocationId)
+            if (id != reservation.ReservationId)
             {
                 return BadRequest();
             }
 
-            _context.Entry(location).State = EntityState.Modified;
+            _context.Entry(reservation).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace AirBnB.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!LocationExists(id))
+                if (!ReservationExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace AirBnB.Controllers
             return NoContent();
         }
 
-        // POST: api/Locations
+        // POST: api/Reservations
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
+        public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
-            _context.Locations.Add(location);
+            _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetLocation", new { id = location.LocationId }, location);
+            return CreatedAtAction("GetReservation", new { id = reservation.ReservationId }, reservation);
         }
 
-        // DELETE: api/Locations/5
+        // DELETE: api/Reservations/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(int id)
+        public async Task<IActionResult> DeleteReservation(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
+            var reservation = await _context.Reservations.FindAsync(id);
+            if (reservation == null)
             {
                 return NotFound();
             }
 
-            _context.Locations.Remove(location);
+            _context.Reservations.Remove(reservation);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool LocationExists(int id)
+        private bool ReservationExists(int id)
         {
-            return _context.Locations.Any(e => e.LocationId == id);
+            return _context.Reservations.Any(e => e.ReservationId == id);
         }
     }
 }

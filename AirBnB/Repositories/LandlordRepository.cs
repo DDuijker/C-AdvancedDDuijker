@@ -7,9 +7,9 @@
     public class LandlordRepository : ILandlordRepository
     {
 
-        private readonly AirbnbContext _context;
+        private readonly AirBnBContext _context;
 
-        public LandlordRepository(AirbnbContext context)
+        public LandlordRepository(AirBnBContext context)
         {
             _context = context;
         }

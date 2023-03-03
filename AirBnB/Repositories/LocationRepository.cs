@@ -7,8 +7,8 @@
     public class LocationRepository : ILocationRepository
     {
 
-        private readonly AirbnbContext _context;
-        public LocationRepository(AirbnbContext context)
+        private readonly AirBnBContext _context;
+        public LocationRepository(AirBnBContext context)
         {
             _context = context;
         }
