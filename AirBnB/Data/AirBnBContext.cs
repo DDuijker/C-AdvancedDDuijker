@@ -1,10 +1,10 @@
 ﻿using AirBnB.Models;
 using Microsoft.EntityFrameworkCore;
 
-
 public class AirBnBContext : DbContext
 {
     public DbSet<Landlord> Landlords { get; set; }
+
     public DbSet<Location> Locations { get; set; }
 
     public DbSet<Customer> Customers { get; set; }
@@ -13,8 +13,23 @@ public class AirBnBContext : DbContext
 
     public DbSet<Image> Images { get; set; }
 
+    //public DbSet<Review> Reviews { get; set; }
+
+
+
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Location>()
+         .HasOne(l => l.Landlord)
+         .WithMany()
+         .HasForeignKey(l => l.LandlordForeignKeyId)
+         .OnDelete(DeleteBehavior.NoAction)
+         ;
+    }
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AirbnbDB;Integrated Security=True;");
     }
 }
+
+

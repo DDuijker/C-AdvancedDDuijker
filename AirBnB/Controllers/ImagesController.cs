@@ -46,7 +46,7 @@ namespace AirBnB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutImage(int id, Image image)
         {
-            if (id != image.ImageId)
+            if (id != image.Id)
             {
                 return BadRequest();
             }
@@ -80,7 +80,7 @@ namespace AirBnB.Controllers
             _context.Images.Add(image);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetImage", new { id = image.ImageId }, image);
+            return CreatedAtAction("GetImage", new { id = image.Id }, image);
         }
 
         // DELETE: api/Images/5
@@ -101,7 +101,7 @@ namespace AirBnB.Controllers
 
         private bool ImageExists(int id)
         {
-            return _context.Images.Any(e => e.ImageId == id);
+            return _context.Images.Any(e => e.Id == id);
         }
     }
 }

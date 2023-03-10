@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AirBnB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AirBnB.Models;
 
 namespace AirBnB.Controllers
 {
@@ -14,7 +9,12 @@ namespace AirBnB.Controllers
     public class LocationsController : ControllerBase
     {
         private readonly AirBnBContext _context;
+        //private readonly ILocationRepository _iLocationRepository;
 
+        //public LocationsController(ILocationRepository iLocationRepository)
+        //{
+        //    _iLocationRepository = iLocationRepository;
+        //}
         public LocationsController(AirBnBContext context)
         {
             _context = context;
@@ -23,6 +23,14 @@ namespace AirBnB.Controllers
         // GET: api/Locations
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+        {
+            return await _context.Locations.ToListAsync();
+        }
+
+        // GET: api/Locations
+        [HttpGet]
+        [Route("GetAll")]
+        public async Task<ActionResult<IEnumerable<Location>>> GetAllLocations()
         {
             return await _context.Locations.ToListAsync();
         }

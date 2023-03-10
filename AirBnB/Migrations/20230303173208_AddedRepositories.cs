@@ -17,7 +17,7 @@ namespace AirBnB.Migrations
                 newName: "LastName");
 
             migrationBuilder.AddColumn<int>(
-                name: "LandlordId",
+                name: "LocationId",
                 table: "Locations",
                 type: "int",
                 nullable: true);
@@ -98,7 +98,7 @@ namespace AirBnB.Migrations
                         name: "FK_Reservations_Customers_CustomerId",
                         column: x => x.CustomerId,
                         principalTable: "Customers",
-                        principalColumn: "CustomerId",
+                        principalColumn: "LocationId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Reservations_Locations_LocationId",
@@ -111,7 +111,7 @@ namespace AirBnB.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_LandlordId",
                 table: "Locations",
-                column: "LandlordId");
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Landlords_AvatarId",
@@ -127,7 +127,7 @@ namespace AirBnB.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_CustomerId",
                 table: "Reservations",
-                column: "CustomerId");
+                column: "LocationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_LocationId",
@@ -139,15 +139,15 @@ namespace AirBnB.Migrations
                 table: "Landlords",
                 column: "AvatarId",
                 principalTable: "Images",
-                principalColumn: "ImageId",
+                principalColumn: "LocationId",
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Locations_Landlords_LandlordId",
                 table: "Locations",
-                column: "LandlordId",
+                column: "LocationId",
                 principalTable: "Landlords",
-                principalColumn: "LandlordId");
+                principalColumn: "LocationId");
         }
 
         /// <inheritdoc />
@@ -179,7 +179,7 @@ namespace AirBnB.Migrations
                 table: "Landlords");
 
             migrationBuilder.DropColumn(
-                name: "LandlordId",
+                name: "LocationId",
                 table: "Locations");
 
             migrationBuilder.DropColumn(

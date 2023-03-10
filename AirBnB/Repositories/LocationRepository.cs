@@ -23,6 +23,7 @@
         }
         public IEnumerable<Location> GetAll()
         {
+
             return _context.Locations.ToList();
         }
         public Location GetById(int id)

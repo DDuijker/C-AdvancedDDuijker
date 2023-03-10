@@ -46,7 +46,7 @@ namespace AirBnB.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(int id, Reservation reservation)
         {
-            if (id != reservation.ReservationId)
+            if (id != reservation.Id)
             {
                 return BadRequest();
             }
@@ -80,7 +80,7 @@ namespace AirBnB.Controllers
             _context.Reservations.Add(reservation);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetReservation", new { id = reservation.ReservationId }, reservation);
+            return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
         }
 
         // DELETE: api/Reservations/5
@@ -101,7 +101,7 @@ namespace AirBnB.Controllers
 
         private bool ReservationExists(int id)
         {
-            return _context.Reservations.Any(e => e.ReservationId == id);
+            return _context.Reservations.Any(e => e.Id == id);
         }
     }
 }

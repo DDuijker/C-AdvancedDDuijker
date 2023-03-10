@@ -25,11 +25,11 @@ namespace AirBnB.Migrations
 
             modelBuilder.Entity("AirBnB.Models.Landlord", b =>
                 {
-                    b.Property<int>("LandlordId")
+                    b.Property<int>("LocationId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LandlordId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -43,7 +43,7 @@ namespace AirBnB.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LandlordId");
+                    b.HasKey("LocationId");
 
                     b.ToTable("Landlords");
                 });

@@ -2,7 +2,7 @@
 {
     public class Reservation
     {
-        public int ReservationId { get; set; }
+        public int Id { get; set; }
         public int CustomerId { get; set; }
 
         public int LocationId { get; set; }
@@ -16,6 +16,21 @@
         public DateTime StartDate { get; set; }
 
         public DateTime EndDate { get; set; }
+
+        //constructor
+        public Reservation()
+        {
+
+        }
+        public Reservation(int id, int customerId, int locationId, float discount, DateTime startDate, DateTime endDate)
+        {
+            Id = id;
+            CustomerId = customerId;
+            LocationId = locationId;
+            Discount = discount;
+            StartDate = startDate;
+            EndDate = endDate;
+        }
 
     }
 }

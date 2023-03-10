@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirBnB.Migrations
 {
     [DbContext(typeof(AirBnBContext))]
-    [Migration("20230303173208_AddedRepositories")]
-    partial class AddedRepositories
+    [Migration("20230304163652_Updated-DataContext")]
+    partial class UpdatedDataContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,11 +63,16 @@ namespace AirBnB.Migrations
                     b.Property<int>("LocationId")
                         .HasColumnType("int");
 
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Url")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("LocationId");
+
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("LocationId");
 
@@ -90,19 +95,23 @@ namespace AirBnB.Migrations
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Phone")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("LocationId");
 
@@ -120,20 +129,38 @@ namespace AirBnB.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
 
-                    b.Property<string>("Address")
+                    b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("LocationId")
+                    b.Property<int>("Features")
                         .HasColumnType("int");
 
-                    b.Property<string>("State")
+                    b.Property<int>("LocationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LocationType")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumberOfGuests")
+                        .HasColumnType("int");
+
+                    b.Property<float>("PricePerDay")
+                        .HasColumnType("real");
+
+                    b.Property<int>("Rooms")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SubTitle")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("LocationId");
 
@@ -176,11 +203,19 @@ namespace AirBnB.Migrations
 
             modelBuilder.Entity("AirBnB.Models.Image", b =>
                 {
-                    b.HasOne("AirBnB.Models.Location", "Location")
+                    b.HasOne("AirBnB.Models.Landlord", "Landlord")
                         .WithMany()
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("AirBnB.Models.Location", "Location")
+                        .WithMany("Images")
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Landlord");
 
                     b.Navigation("Location");
                 });
@@ -188,7 +223,7 @@ namespace AirBnB.Migrations
             modelBuilder.Entity("AirBnB.Models.Landlord", b =>
                 {
                     b.HasOne("AirBnB.Models.Image", "Avatar")
-                        .WithOne("Landlord")
+                        .WithOne()
                         .HasForeignKey("AirBnB.Models.Landlord", "AvatarId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -198,9 +233,13 @@ namespace AirBnB.Migrations
 
             modelBuilder.Entity("AirBnB.Models.Location", b =>
                 {
-                    b.HasOne("AirBnB.Models.Landlord", null)
+                    b.HasOne("AirBnB.Models.Landlord", "Landlord")
                         .WithMany("Locations")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Landlord");
                 });
 
             modelBuilder.Entity("AirBnB.Models.Reservation", b =>
@@ -212,7 +251,7 @@ namespace AirBnB.Migrations
                         .IsRequired();
 
                     b.HasOne("AirBnB.Models.Location", "Location")
-                        .WithMany()
+                        .WithMany("Reservations")
                         .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -227,15 +266,16 @@ namespace AirBnB.Migrations
                     b.Navigation("Reservations");
                 });
 
-            modelBuilder.Entity("AirBnB.Models.Image", b =>
-                {
-                    b.Navigation("Landlord")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AirBnB.Models.Landlord", b =>
                 {
                     b.Navigation("Locations");
+                });
+
+            modelBuilder.Entity("AirBnB.Models.Location", b =>
+                {
+                    b.Navigation("Images");
+
+                    b.Navigation("Reservations");
                 });
 #pragma warning restore 612, 618
         }
