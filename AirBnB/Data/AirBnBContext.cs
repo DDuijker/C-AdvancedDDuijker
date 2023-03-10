@@ -15,21 +15,18 @@ public class AirBnBContext : DbContext
 
     //public DbSet<Review> Reviews { get; set; }
 
-
-
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    public AirBnBContext(DbContextOptions<AirBnBContext> options) : base(options)
     {
-        modelBuilder.Entity<Location>()
-         .HasOne(l => l.Landlord)
-         .WithMany()
-         .HasForeignKey(l => l.LandlordForeignKeyId)
-         .OnDelete(DeleteBehavior.NoAction)
-         ;
     }
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        optionsBuilder.UseSqlServer(@"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=AirbnbDB;Integrated Security=True;");
-    }
+
+    //protected override void OnModelCreating(ModelBuilder modelBuilder)
+    //{
+    //    modelBuilder.Entity<Location>()
+    //     .HasOne(l => l.Landlord)
+    //     .WithMany()
+    //     .OnDelete(DeleteBehavior.NoAction)
+    //     ;
+    //}
 }
 
 

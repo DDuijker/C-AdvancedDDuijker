@@ -10,11 +10,6 @@
 
         public List<Reservation> Reservations { get; set; }
 
-
-        public Customer()
-        {
-
-        }
         public Customer(int id, string firstName, string lastName, string email)
         {
             Id = id;

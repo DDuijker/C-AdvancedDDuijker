@@ -12,8 +12,6 @@
 
         public Landlord Landlord { get; set; }
 
-        public int LandlordForeignKeyId { get; set; }
-
         public List<Reservation> Reservations { get; set; }
 
         public string SubTitle { get; set; }
@@ -22,33 +20,46 @@
 
         public int NumberOfGuests { get; set; }
 
-        public int Features { get; set; }
-
         public string Description { get; set; }
 
-        public int LocationType { get; set; }
-
-        public Location()
+        [Flags]
+        public enum Features
         {
-
+            Smoking = 1,
+            PetsAllowed = 2,
+            Wifi = 4,
+            TV = 8,
+            Bath = 16,
+            Breakfast = 32
         }
 
-        public Location(int id, string title, int rooms, Landlord landlord, int landlordForeignKeyId, string subTitle, float pricePerDay, int numberOfGuests, int features, string description, int type, List<Image> images, List<Reservation> reservations)
+        public enum LocationType
         {
-            LocationId = id;
-            Title = title;
-            Rooms = rooms;
-            Landlord = landlord;
-            LandlordForeignKeyId = landlordForeignKeyId;
-            SubTitle = subTitle;
-            PricePerDay = pricePerDay;
-            NumberOfGuests = numberOfGuests;
-            Features = features;
-            Description = description;
-            LocationType = type;
-            Images = images;
-            Reservations = reservations;
+            Appartment,
+            Cottage,
+            Chalet,
+            Room,
+            Hotel,
+            House
         }
+
+
+        //public Location(int id, string title, int rooms, Landlord landlord, int landlordForeignKeyId, string subTitle, float pricePerDay, int numberOfGuests, Enum features, string description, Enum LocationType, List<Image> images, List<Reservation> reservations)
+        //{
+        //    LocationId = id;
+        //    Title = title;
+        //    Rooms = rooms;
+        //    Landlord = landlord;
+        //    LandlordForeignKeyId = landlordForeignKeyId;
+        //    SubTitle = subTitle;
+        //    PricePerDay = pricePerDay;
+        //    NumberOfGuests = numberOfGuests;
+        //    Features = features;
+        //    Description = description;
+        //    LocationType = type;
+        //    Images = images;
+        //    Reservations = reservations;
+        //}
 
 
     }

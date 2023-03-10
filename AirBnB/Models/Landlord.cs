@@ -13,9 +13,9 @@
 
         public string Phone { get; set; }
 
-        public int AvatarId { get; set; }
+        public int? AvatarId { get; set; }
 
-        public Image Avatar { get; set; }
+        public Image? Avatar { get; set; }
 
         public List<Location> Locations { get; set; }
 

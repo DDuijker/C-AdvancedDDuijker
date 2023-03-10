@@ -3,11 +3,11 @@
     using AirBnB.Models;
     using Microsoft.EntityFrameworkCore;
 
-    public class ISearchService
+    public class SearchService
     {
         private readonly AirBnBContext _context;
 
-        public ISearchService(AirBnBContext context)
+        public SearchService(AirBnBContext context)
         {
             _context = context;
         }
