@@ -1,6 +1,8 @@
 ﻿using AirBnB.Models;
+using AirBnB.Models.DTO;
+using AirBnB.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AirBnB.Controllers
 {
@@ -8,108 +10,109 @@ namespace AirBnB.Controllers
     [ApiController]
     public class LocationsController : ControllerBase
     {
-        private readonly AirBnBContext _context;
-        //private readonly ILocationRepository _iLocationRepository;
+        private readonly IMapper _mapper;
+        private readonly ILocationService _locationService;
 
-        //public LocationsController(ILocationRepository iLocationRepository)
-        //{
-        //    _iLocationRepository = iLocationRepository;
-        //}
-        public LocationsController(AirBnBContext context)
+        public LocationsController(ILocationService locationService, IMapper mapper)
         {
-            _context = context;
+            _locationService = locationService;
+            _mapper = mapper;
         }
 
         // GET: api/Locations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Location>>> GetLocations()
+
+        public IEnumerable<LocationDTO> GetLocations()
         {
-            return await _context.Locations.ToListAsync();
+
+            return _locationService.GetAllLocations().Select(location => _mapper.Map<Location, LocationDTO>(location));
         }
 
         // GET: api/Locations
         [HttpGet]
         [Route("GetAll")]
-        public async Task<ActionResult<IEnumerable<Location>>> GetAllLocations()
+        public IEnumerable<Location> GetAllLocations()
         {
-            return await _context.Locations.ToListAsync();
+            return _locationService.GetAllLocations();
         }
 
         // GET: api/Locations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Location>> GetLocation(int id)
+        public Location GetLocation(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var location = _locationService.GetSpecificLocation(id);
 
             if (location == null)
             {
-                return NotFound();
+                return null;
             }
 
             return location;
         }
 
-        // PUT: api/Locations/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLocation(int id, Location location)
-        {
-            if (id != location.LocationId)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/Locations/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutLocation(int id, Location location)
+        //{
+        //    if (id != location.LocationId)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(location).State = EntityState.Modified;
+        //    _locationService.Entry(location).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LocationExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _locationService.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!LocationExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        // POST: api/Locations
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Location>> PostLocation(Location location)
-        {
-            _context.Locations.Add(location);
-            await _context.SaveChangesAsync();
+        //// POST: api/Locations
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Location>> PostLocation(Location location)
+        //{
+        //    _locationService.Locations.Add(location);
+        //    await _locationService.SaveChangesAsync();
 
-            return CreatedAtAction("GetLocation", new { id = location.LocationId }, location);
-        }
+        //    return CreatedAtAction("GetLocation", new { id = location.LocationId }, location);
+        //}
 
-        // DELETE: api/Locations/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLocation(int id)
-        {
-            var location = await _context.Locations.FindAsync(id);
-            if (location == null)
-            {
-                return NotFound();
-            }
+        //// DELETE: api/Locations/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteLocation(int id)
+        //{
+        //    var location = await _locationService.Locations.FindAsync(id);
+        //    if (location == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            _context.Locations.Remove(location);
-            await _context.SaveChangesAsync();
+        //    _locationService.Locations.Remove(location);
+        //    await _locationService.SaveChangesAsync();
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
-        private bool LocationExists(int id)
-        {
-            return _context.Locations.Any(e => e.LocationId == id);
-        }
+        //    private bool LocationExists(int id)
+        //    {
+        //        var location = _locationService.GetSpecificLocation(id);
+        //        return location != null;
+        //    }
+        //}
     }
 }

@@ -282,3 +282,5 @@ C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\ob
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\obj\Debug\net6.0\AirBnB.pdb
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\obj\Debug\net6.0\AirBnB.genruntimeconfig.cache
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\obj\Debug\net6.0\ref\AirBnB.dll
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\AutoMapper.dll
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\AutoMapper.Extensions.Microsoft.DependencyInjection.dll

@@ -19,7 +19,10 @@
         public void Delete(int id)
         {
             var location = _context.Locations.Find(id);
-            _context.Locations.Remove(location);
+            if (location != null)
+            {
+                _context.Locations.Remove(location);
+            }
         }
         public IEnumerable<Location> GetAll()
         {
@@ -28,7 +31,9 @@
         }
         public Location GetById(int id)
         {
-            return _context.Locations.Find(id);
+            var location = _context.Locations.Find(id);
+            return location;
+
         }
         public void Save()
         {

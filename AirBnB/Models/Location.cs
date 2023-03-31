@@ -21,27 +21,10 @@
         public int NumberOfGuests { get; set; }
 
         public string Description { get; set; }
+        public Features Features { get; set; }
 
-        [Flags]
-        public enum Features
-        {
-            Smoking = 1,
-            PetsAllowed = 2,
-            Wifi = 4,
-            TV = 8,
-            Bath = 16,
-            Breakfast = 32
-        }
+        public LocationType LocationType { get; set; }
 
-        public enum LocationType
-        {
-            Appartment,
-            Cottage,
-            Chalet,
-            Room,
-            Hotel,
-            House
-        }
 
 
         //public Location(int id, string title, int rooms, Landlord landlord, int landlordForeignKeyId, string subTitle, float pricePerDay, int numberOfGuests, Enum features, string description, Enum LocationType, List<Image> images, List<Reservation> reservations)
@@ -63,4 +46,28 @@
 
 
     }
+
+}
+[Flags]
+public enum Features
+{
+    Smoking = 1,
+    PetsAllowed = 2,
+    Wifi = 4,
+    TV = 8,
+    Bath = 16,
+    Breakfast = 32
+}
+
+
+
+
+public enum LocationType
+{
+    Appartment,
+    Cottage,
+    Chalet,
+    Room,
+    Hotel,
+    House
 }
