@@ -10,6 +10,7 @@
 
         public int Rooms { get; set; }
 
+        public int LandlordId { get; set; }
         public Landlord Landlord { get; set; }
 
         public List<Reservation> Reservations { get; set; }

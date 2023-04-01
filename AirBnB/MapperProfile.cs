@@ -7,7 +7,9 @@
     {
         public MapperProfile()
         {
-            CreateMap<Location, LocationDTO>();
+            CreateMap<Location, LocationDTO>().ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Images.Find(i => i.IsCover).Url))
+                .ForMember(dest => dest.LandlordAvatarUrl, opt => opt.MapFrom(src => src.Landlord.Avatar.Url));
+
         }
     }
 
