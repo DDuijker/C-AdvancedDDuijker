@@ -3,114 +3,105 @@ using Microsoft.EntityFrameworkCore;
 
 public class AirBnBContext : DbContext
 {
-    public DbSet<Landlord> Landlords { get; set; }
-
-    public DbSet<Location> Locations { get; set; }
-
-    public DbSet<Customer> Customers { get; set; }
-
-    public DbSet<Reservation> Reservations { get; set; }
-
-    public DbSet<Image> Images { get; set; }
-
-    //public DbSet<Review> Reviews { get; set; }
 
     public AirBnBContext(DbContextOptions<AirBnBContext> options) : base(options)
     {
+
     }
+
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseLazyLoadingProxies();
+        optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=AirbnbDB;Integrated Security=SSPI;");
+        base.OnConfiguring(optionsBuilder);
+
+
+
+    }
+    public DbSet<Landlord> Landlords { get; set; } = default!;
+
+
+
+    public DbSet<Reservation> Reservations { get; set; }
+
+
+
+    public DbSet<Location> Locations { get; set; }
+
+
+
+    public DbSet<Customer> Customers { get; set; }
+
+    public DbSet<Image> Images { get; set; }
+
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        //Define the relations between the models
 
-        // Location >-- Landlord
-        modelBuilder.Entity<Location>()
-         .HasOne(l => l.Landlord)
-         .WithMany(l => l.Locations)
-         //If you delete a location, the landlord will not be deleted
-         .OnDelete(DeleteBehavior.NoAction);
 
-        //Landlord --< Locations
-        modelBuilder.Entity<Landlord>()
-            .HasMany(l => l.Locations)
-            .WithOne(l => l.Landlord)
-            .HasForeignKey(l => l.LandlordId)
-            //if you delete a landlord, the locations will be deleted
-            .OnDelete(DeleteBehavior.Cascade);
 
-        // Landlord --- Avatar
-        modelBuilder.Entity<Landlord>()
-            .HasOne(l => l.Avatar) //a landlord has only one optional avatar image
-            .WithOne() //avatar or image has no landlord id
-            .HasForeignKey<Landlord>(l => l.AvatarId) //the avatar id is the foreign key in the landlord 
-            .OnDelete(DeleteBehavior.SetNull); //if an avatar image gets deleted, set avatarid to null
+        modelBuilder.Entity<Image>().HasOne(i => i.Landlord).WithOne(l => l.Avatar).HasForeignKey<Landlord>(i => i.AvatarId);
+        base.OnModelCreating(modelBuilder);
 
-        // Customer --< Reservation
-        modelBuilder.Entity<Customer>()
-            .HasMany(c => c.Reservations)
-            .WithOne()
-            .HasForeignKey(r => r.CustomerId);
 
-        // Reservation >--- Location
-        modelBuilder.Entity<Reservation>()
-            .HasOne(r => r.Location)
-            .WithMany(l => l.Reservations)
-            .HasForeignKey(r => r.LocationId);
+
+        modelBuilder.Entity<Customer>().HasData(
+        new { FirstName = "Bilal", LastName = "Yousef", Email = "Bilal.youssry@gmail.com", Age = 20, Phone = "0612345678", Id = 1 },
+        new { FirstName = "Max", LastName = "Metz", Email = "maxmetz8@gmail.com", Age = 20, Phone = "12345678", Id = 2 }
+        );
+
+
+
+
+        modelBuilder.Entity<Landlord>().HasData(
+        new { FirstName = "Herman ", LastName = "Mol", Email = "herman@gmail.com", Age = 55, Id = 1, Phone = "12345678", AvatarId = 1 },
+        new { FirstName = "Jaap", LastName = "Keizer", Email = "Jaap@gmail.com", Id = 2, Age = 61, Phone = "12345678", AvatarId = 2 }
+
+
+
+        );
+
+
+
+
+
+        modelBuilder.Entity<Location>().HasData(
+        new { Id = 1, Rooms = 3, Description = "Mooi huis gelegen in het centrum", Features = Features.Smoking, SubTitle = "Huis word al jaren goed bevonden door 100+ klanten", NumberOfGuests = 3, Title = "BeeldhouwerKasteel", LocationType = LocationType.Appartment, PricePerDay = 50.99F, LandlordId = 1, ImageId = 3 },
+        new { Id = 2, Rooms = 4, Description = "Prachtig kasteel van Nederland", Features = Features.Smoking, SubTitle = "Prijzig, maar een echte ervaring.", NumberOfGuests = 20, Title = "Kasteel", LocationType = LocationType.House, PricePerDay = 500.99F, LandlordId = 2, ImageId = 4 }
+        );
+
 
 
 
         modelBuilder.Entity<Image>().HasData(
-           new Image
-           {
-               Id = 1,
-               Url = "https://upload.wikimedia.org/wikipedia/commons/3/3d/Random_House.jpg",
-               IsCover = true
-           },
-           new Image
-           {
-               Id = 2,
-               Url = "https://carlislehomes.com.au/assets/Uploads/a7e501203f/Contemporary-Allure.jpg",
-               IsCover = false
-           },
-           new Image
-           {
-               Id = 3,
-               Url = "https://cdnstorage.sendbig.com/unreal/female.webp",
-               IsCover = false
-           }
-         );
+        new { Id = 1, IsCover = false, Url = "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg", LocationId = 1 },
+        new { Id = 2, IsCover = false, Url = "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg", LocationId = 2 },
+        new { Id = 3, IsCover = true, Url = "https://www.chr-apartments.com/sites/default/files/styles/tile_image_cropped/public/video_thumbnails/Rwiy-8x8o5w.jpg?itok=X0MqiZeY", LocationId = 1 },
+        new { Id = 4, IsCover = true, Url = "https://www.mapofjoy.nl/wp-content/uploads/2022/11/kasteel-de-haar-mapofjoy.jpg", LocationId = 2 }
+        );
 
-        //modelBuilder.Entity<Location>().HasData
-        //    (
-        //    new
-        //    {
-        //        LocationId = 1,
-        //        Title = "The Cozy House",
-        //        SubTitle = "A cozy house in the middle of the city",
-        //        Description = "This is a cozy house in the middle of the city. It has a nice garden and a big kitchen. It is close to the city center and the train station. It is a perfect place for a family or a group of friends.",
-        //        LandlordId = 1,
-        //        Features = Features.Breakfast | Features.Bath | Features.PetsAllowed | Features.Smoking | Features.TV | Features.Wifi,
-        //        LocationType = LocationType.House,
-        //        NumberOfGuests = 4,
-        //        PricePerDay = 100F,
-        //        Rooms = 2,
 
-        //    }
-        //    );
-        //modelBuilder.Entity<Landlord>().HasData
-        //    (
-        //    new
-        //    {
-        //        LandlordId = 1,
-        //        FirstName = "John",
-        //        LastName = "Doe",
-        //        Email = "johnDoe@gmail.com",
-        //        Age = 30,
-        //        Phone = "123456789",
-        //        AvatarId = 3
 
-        //    }
-        //    );
+
+
+
+
+        modelBuilder.Entity<Reservation>().HasData(
+        new { Id = 1, StartDate = new DateTime(2022, 6, 1), EndDate = new DateTime(2022, 7, 1), CustomerId = 1, LocationId = 1, Discount = 0F },
+        new { Id = 2, StartDate = new DateTime(2022, 6, 7), EndDate = new DateTime(2022, 7, 7), CustomerId = 2, LocationId = 2, Discount = 0F }
+
+
+
+        );
+
+
+
+
+
+
+
+
     }
 }
 

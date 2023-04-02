@@ -8,23 +8,8 @@
         public string LastName { get; set; }
         public string Email { get; set; }
 
-        public List<Reservation> Reservations { get; set; }
+        public virtual List<Reservation> Reservations { get; set; }
 
-        public Customer(int id, string firstName, string lastName, string email)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-        }
 
-        public Customer(int id, string firstName, string lastName, string email, List<Reservation> reservations)
-        {
-            Id = id;
-            FirstName = firstName;
-            LastName = lastName;
-            Email = email;
-            Reservations = reservations;
-        }
     }
 }

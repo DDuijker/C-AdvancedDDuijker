@@ -56,5 +56,3 @@ public class Program
         app.Run();
     }
 }
-//Hoezo worden mappers ook alweer gebruikt
-//ik snap niet waarom er dubbele dingen gebruikt worden, in het voorbeeld IStudentMapper en StudentMapper

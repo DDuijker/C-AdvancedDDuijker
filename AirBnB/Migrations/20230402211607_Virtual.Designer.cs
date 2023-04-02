@@ -11,18 +11,17 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirBnB.Migrations
 {
     [DbContext(typeof(AirBnBContext))]
-    [Migration("20230310105646_Location")]
-    partial class Location
+    [Migration("20230402211607_Virtual")]
+    partial class Virtual
     {
-        /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.3")
+                .HasAnnotation("ProductVersion", "6.0.15")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
             modelBuilder.Entity("AirBnB.Models.Customer", b =>
                 {
@@ -30,7 +29,7 @@ namespace AirBnB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -47,6 +46,22 @@ namespace AirBnB.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Customers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "Bilal.youssry@gmail.com",
+                            FirstName = "Bilal",
+                            LastName = "Yousef"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "maxmetz8@gmail.com",
+                            FirstName = "Max",
+                            LastName = "Metz"
+                        });
                 });
 
             modelBuilder.Entity("AirBnB.Models.Image", b =>
@@ -55,12 +70,12 @@ namespace AirBnB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<bool>("IsCover")
                         .HasColumnType("bit");
 
-                    b.Property<int?>("LocationId")
+                    b.Property<int>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -72,6 +87,36 @@ namespace AirBnB.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Images");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            IsCover = false,
+                            LocationId = 1,
+                            Url = "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            IsCover = false,
+                            LocationId = 2,
+                            Url = "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            IsCover = true,
+                            LocationId = 1,
+                            Url = "https://www.chr-apartments.com/sites/default/files/styles/tile_image_cropped/public/video_thumbnails/Rwiy-8x8o5w.jpg?itok=X0MqiZeY"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            IsCover = true,
+                            LocationId = 2,
+                            Url = "https://www.mapofjoy.nl/wp-content/uploads/2022/11/kasteel-de-haar-mapofjoy.jpg"
+                        });
                 });
 
             modelBuilder.Entity("AirBnB.Models.Landlord", b =>
@@ -80,12 +125,12 @@ namespace AirBnB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("Age")
                         .HasColumnType("int");
 
-                    b.Property<int>("AvatarId")
+                    b.Property<int?>("AvatarId")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
@@ -107,24 +152,53 @@ namespace AirBnB.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AvatarId")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[AvatarId] IS NOT NULL");
 
                     b.ToTable("Landlords");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Age = 55,
+                            AvatarId = 1,
+                            Email = "herman@gmail.com",
+                            FirstName = "Herman ",
+                            LastName = "Mol",
+                            Phone = "12345678"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Age = 61,
+                            AvatarId = 2,
+                            Email = "Jaap@gmail.com",
+                            FirstName = "Jaap",
+                            LastName = "Keizer",
+                            Phone = "12345678"
+                        });
                 });
 
             modelBuilder.Entity("AirBnB.Models.Location", b =>
                 {
-                    b.Property<int>("LocationId")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocationId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LandlordId")
+                    b.Property<int>("Features")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("LandlordId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("LocationType")
                         .HasColumnType("int");
 
                     b.Property<int>("NumberOfGuests")
@@ -144,11 +218,39 @@ namespace AirBnB.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("LocationId");
+                    b.HasKey("Id");
 
                     b.HasIndex("LandlordId");
 
                     b.ToTable("Locations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Mooi huis gelegen in het centrum",
+                            Features = 1,
+                            LandlordId = 1,
+                            LocationType = 0,
+                            NumberOfGuests = 3,
+                            PricePerDay = 50.99f,
+                            Rooms = 3,
+                            SubTitle = "Huis word al jaren goed bevonden door 100+ klanten",
+                            Title = "BeeldhouwerKasteel"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Prachtig kasteel van Nederland",
+                            Features = 1,
+                            LandlordId = 2,
+                            LocationType = 5,
+                            NumberOfGuests = 20,
+                            PricePerDay = 500.99f,
+                            Rooms = 4,
+                            SubTitle = "Prijzig, maar een echte ervaring.",
+                            Title = "Kasteel"
+                        });
                 });
 
             modelBuilder.Entity("AirBnB.Models.Reservation", b =>
@@ -157,7 +259,7 @@ namespace AirBnB.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
                     b.Property<int>("CustomerId")
                         .HasColumnType("int");
@@ -181,13 +283,35 @@ namespace AirBnB.Migrations
                     b.HasIndex("LocationId");
 
                     b.ToTable("Reservations");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CustomerId = 1,
+                            Discount = 0f,
+                            EndDate = new DateTime(2022, 7, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LocationId = 1,
+                            StartDate = new DateTime(2022, 6, 1, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CustomerId = 2,
+                            Discount = 0f,
+                            EndDate = new DateTime(2022, 7, 7, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            LocationId = 2,
+                            StartDate = new DateTime(2022, 6, 7, 0, 0, 0, 0, DateTimeKind.Unspecified)
+                        });
                 });
 
             modelBuilder.Entity("AirBnB.Models.Image", b =>
                 {
                     b.HasOne("AirBnB.Models.Location", "Location")
                         .WithMany("Images")
-                        .HasForeignKey("LocationId");
+                        .HasForeignKey("LocationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Location");
                 });
@@ -196,9 +320,7 @@ namespace AirBnB.Migrations
                 {
                     b.HasOne("AirBnB.Models.Image", "Avatar")
                         .WithOne("Landlord")
-                        .HasForeignKey("AirBnB.Models.Landlord", "AvatarId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("AirBnB.Models.Landlord", "AvatarId");
 
                     b.Navigation("Avatar");
                 });
@@ -207,9 +329,7 @@ namespace AirBnB.Migrations
                 {
                     b.HasOne("AirBnB.Models.Landlord", "Landlord")
                         .WithMany("Locations")
-                        .HasForeignKey("LandlordId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LandlordId");
 
                     b.Navigation("Landlord");
                 });

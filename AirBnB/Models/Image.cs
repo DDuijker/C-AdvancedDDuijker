@@ -8,9 +8,9 @@
 
         public bool IsCover { get; set; }
 
-        public Location? Location { get; set; }
+        public virtual Location Location { get; set; }
 
-        public Landlord? Landlord { get; set; }
+        public virtual Landlord? Landlord { get; set; }
 
 
     }

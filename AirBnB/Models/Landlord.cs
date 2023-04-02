@@ -15,9 +15,15 @@
 
         public int? AvatarId { get; set; }
 
-        public Image? Avatar { get; set; }
+        public virtual Image? Avatar { get; set; }
 
-        public List<Location> Locations { get; set; }
+        public virtual List<Location> Locations { get; set; }
+
+        public Landlord()
+        {
+            Locations = new List<Location>();
+
+        }
 
 
     }

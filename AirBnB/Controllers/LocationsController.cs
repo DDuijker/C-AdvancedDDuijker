@@ -50,6 +50,9 @@ namespace AirBnB.Controllers
             return location;
         }
 
+        //Add this in your service if you want to use it
+
+
         //// PUT: api/Locations/5
         //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         //[HttpPut("{id}")]

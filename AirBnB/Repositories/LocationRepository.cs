@@ -27,7 +27,7 @@
         public IEnumerable<Location> GetAll()
         {
 
-            return _context.Locations.ToList();
+            return _context.Locations.Include(p => p.Landlord).Include(p => p.Images).ToList();
         }
         public Location GetById(int id)
         {
@@ -44,6 +44,5 @@
             _context.Entry(location).State = EntityState.Modified;
         }
     }
-
 
 }
