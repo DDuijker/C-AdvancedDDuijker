@@ -10,8 +10,8 @@
         }
         public string Description { get; set; }
 
-        public string ImageUrl { get; set; }
+        public string ImageURL { get; set; }
 
-        public string LandlordAvatarUrl { get; set; }
+        public string LandlordAvatarURL { get; set; }
     }
 }

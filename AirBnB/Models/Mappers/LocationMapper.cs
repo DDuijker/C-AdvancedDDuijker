@@ -20,8 +20,8 @@ namespace AirBnB.Models.Mappers
                 Title = location.Title,
                 SubTitle = location.SubTitle,
                 Description = location.Description,
-                ImageUrl = coverUrl,
-                LandlordAvatarUrl = location.Landlord.Avatar.Url
+                ImageURL = coverUrl,
+                LandlordAvatarURL = location.Landlord.Avatar.Url
             };
         }
 
