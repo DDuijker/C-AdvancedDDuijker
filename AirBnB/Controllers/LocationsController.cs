@@ -31,12 +31,12 @@ namespace AirBnB.Controllers
             return _locationService.GetAllLocations().Select(location => _mapper.Map<Location, LocationDTO>(location));
         }
 
-        // GET: api/Locations
-        [HttpGet]
-        [Route("GetAll")]
-        public IEnumerable<Location> GetAllLocations()
+        // GET: api/Locations/GetAll
+        [HttpGet("GetAll")]
+        public IEnumerable<LocationDTO> GetAllLocations()
         {
-            return _locationService.GetAllLocations();
+            var locations = _locationService.GetAllLocations();
+            return _mapper.Map<IEnumerable<Location>, IEnumerable<LocationDTO>>(locations);
         }
 
         // GET: api/Locations/5
