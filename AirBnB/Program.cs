@@ -6,10 +6,15 @@ using AirBnB;
 using AirBnB.Interfaces;
 using AirBnB.Models;
 using AirBnB.Models.DTO;
+using AirBnB.Options;
 using AirBnB.Repositories;
 using AirBnB.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ApiExplorer;
+using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 public class Program
 {
@@ -28,14 +33,36 @@ public class Program
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
-        builder.Services.AddSwaggerGen();
+        builder.Services.AddSwaggerGen(options =>
+        {
+            options.SwaggerDoc("v1", new OpenApiInfo { Title = "AirBnB API", Version = "v1" });
+            options.SwaggerDoc("v2", new OpenApiInfo { Title = "AirBnB API", Version = "v2" });
+        });
+        builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
         builder.Services.AddScoped<ILocationRepository, LocationRepository>();
         builder.Services.AddScoped<ILocationService, LocationService>();
         //Mapping
         var config = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationDTO>());
+        var config2 = new MapperConfiguration(cfg => cfg.CreateMap<LocationDTOv2, Location>());
         var mapper = config.CreateMapper();
+        var mapper2 = config2.CreateMapper();
         builder.Services.AddAutoMapper(typeof(MapperProfile));
-        //builder.Services.AddAutoMapper(typeof(Program));
+        builder.Services.AddAutoMapper(typeof(Program));
+
+        //Add Api-versioning
+        builder.Services.AddApiVersioning(setup =>
+        {
+            setup.ReportApiVersions = true;
+            setup.AssumeDefaultVersionWhenUnspecified = true;
+            setup.DefaultApiVersion = new ApiVersion(1, 0);
+            setup.ApiVersionReader = new QueryStringApiVersionReader("api-version");
+        });
+
+        builder.Services.AddVersionedApiExplorer(setup =>
+        {
+            setup.GroupNameFormat = "'v'VVV";
+            setup.SubstituteApiVersionInUrl = true;
+        });
 
         var app = builder.Build();
 
@@ -43,9 +70,19 @@ public class Program
         if (app.Environment.IsDevelopment())
         {
             app.UseSwagger();
-            app.UseSwaggerUI();
+            app.UseSwaggerUI(options =>
+            {
+                var provider = app.Services.GetRequiredService<IApiVersionDescriptionProvider>();
+                foreach (var description in provider.ApiVersionDescriptions)
+                {
+                    options.SwaggerEndpoint($"/swagger/{description.GroupName}/swagger.json?api-version=2", description.GroupName.ToUpperInvariant());
+                }
+            });
+
             app.UseCors(options => options.AllowAnyHeader().AllowAnyOrigin());
         }
+
+        app.UseApiVersioning();
 
         app.UseHttpsRedirection();
 

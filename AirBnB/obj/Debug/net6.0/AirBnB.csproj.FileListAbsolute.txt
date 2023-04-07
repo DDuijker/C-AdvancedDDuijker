@@ -269,3 +269,5 @@ C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bi
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Castle.Core.dll
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Proxies.dll
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Microsoft.AspNetCore.Mvc.Versioning.ApiExplorer.dll
