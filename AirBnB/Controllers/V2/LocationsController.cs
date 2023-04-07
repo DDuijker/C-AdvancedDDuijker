@@ -24,9 +24,9 @@ namespace AirBnB.Controllers.V2
 
         // GET: api/Locations
         [HttpGet]
-        public IEnumerable<LocationDTOv2> GetLocations()
+        public async Task<IEnumerable<LocationDTOv2>> GetLocations()
         {
-            return _locationService.GetAllLocations().Select(location => _mapper.Map<Location, LocationDTOv2>(location));
+            return await _locationService.GetDTOv2Locations();
         }
 
         // GET: api/Locations/5

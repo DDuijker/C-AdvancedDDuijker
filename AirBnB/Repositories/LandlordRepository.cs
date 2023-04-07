@@ -25,14 +25,15 @@
             _context.Landlords.Remove(landlord);
         }
 
-        public IEnumerable<Landlord> GetAll()
+        public async Task<IEnumerable<Landlord>> GetAll()
         {
-            return _context.Landlords.ToList();
+            var result = await _context.Landlords.ToListAsync();
+            return result;
         }
 
-        public Landlord GetById(int id)
+        public async Task<Landlord> GetById(int id)
         {
-            return _context.Landlords.Find(id);
+            return await _context.Landlords.FindAsync(id);
         }
 
         public void Save()

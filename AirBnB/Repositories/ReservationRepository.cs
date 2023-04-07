@@ -24,14 +24,14 @@
             _context.Reservations.Remove(reservation);
         }
 
-        public IEnumerable<Reservation> GetAll()
+        public async Task<IEnumerable<Reservation>> GetAll()
         {
-            return _context.Reservations.ToList();
+            return await _context.Reservations.ToListAsync();
         }
 
-        public Reservation GetById(int id)
+        public async Task<Reservation> GetById(int id)
         {
-            return _context.Reservations.Find(id);
+            return await _context.Reservations.FindAsync(id);
         }
 
         public void Save()

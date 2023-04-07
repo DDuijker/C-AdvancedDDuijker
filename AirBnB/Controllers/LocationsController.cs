@@ -25,18 +25,17 @@ namespace AirBnB.Controllers
         // GET: api/Locations
         [HttpGet]
 
-        public IEnumerable<LocationDTO> GetLocations()
+        public async Task<IEnumerable<LocationDTO>> GetLocations()
         {
 
-            return _locationService.GetAllLocations().Select(location => _mapper.Map<Location, LocationDTO>(location));
+            return await _locationService.GetDTOLocations();
         }
 
         // GET: api/Locations/GetAll
         [HttpGet("GetAll")]
-        public IEnumerable<LocationDTO> GetAllLocations()
+        public async Task<IEnumerable<Location>> GetAllLocations()
         {
-            var locations = _locationService.GetAllLocations();
-            return _mapper.Map<IEnumerable<Location>, IEnumerable<LocationDTO>>(locations);
+            return await _locationService.GetAllLocations();
         }
 
         // GET: api/Locations/5

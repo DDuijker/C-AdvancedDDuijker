@@ -24,10 +24,10 @@
                 _context.Locations.Remove(location);
             }
         }
-        public IEnumerable<Location> GetAll()
+        public async Task<IEnumerable<Location>> GetAll()
         {
 
-            return _context.Locations.Include(p => p.Landlord).Include(p => p.Images).ToList();
+            return (await _context.Locations.Include(p => p.Landlord).Include(p => p.Images).ToListAsync());
         }
         public Location GetById(int id)
         {

@@ -3,8 +3,8 @@
     using AirBnB.Models;
     public interface IReservationRepository
     {
-        IEnumerable<Reservation> GetAll();
-        Reservation GetById(int id);
+        public Task<IEnumerable<Reservation>> GetAll();
+        public Task<Reservation> GetById(int id);
         void Add(Reservation reservation);
         void Update(Reservation reservation);
         void Delete(int id);

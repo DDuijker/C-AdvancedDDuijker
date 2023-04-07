@@ -3,7 +3,7 @@
     using AirBnB.Models;
     public interface ILocationRepository
     {
-        IEnumerable<Location> GetAll();
+        public Task<IEnumerable<Location>> GetAll();
         Location GetById(int id);
         void Add(Location location);
         void Update(Location location);

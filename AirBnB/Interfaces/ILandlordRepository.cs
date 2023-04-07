@@ -4,8 +4,8 @@
     using AirBnB.Models;
     public interface ILandlordRepository
     {
-        IEnumerable<Landlord> GetAll();
-        Landlord GetById(int id);
+        public Task<IEnumerable<Landlord>> GetAll();
+        public Task<Landlord> GetById(int id);
         void Add(Landlord landlord);
         void Update(Landlord landlord);
         void Delete(int id);

@@ -3,6 +3,7 @@ namespace AirBnB.Repositories
 {
     using AirBnB.Interfaces;
     using AirBnB.Models;
+    using Microsoft.EntityFrameworkCore;
     using System.Collections.Generic;
     public class CustomerRepository : ICustomerRepository
     {
@@ -20,13 +21,13 @@ namespace AirBnB.Repositories
             var customer = _context.Customers.Find(id);
             _context.Customers.Remove(customer);
         }
-        public IEnumerable<Customer> GetAll()
+        public async Task<IEnumerable<Customer>> GetAll()
         {
-            return _context.Customers.ToList();
+            return (await _context.Customers.ToListAsync());
         }
-        public Customer GetById(int id)
+        public async Task<Customer> GetById(int id)
         {
-            return _context.Customers.Find(id);
+            return await _context.Customers.FindAsync(id);
         }
         public void Save()
         {

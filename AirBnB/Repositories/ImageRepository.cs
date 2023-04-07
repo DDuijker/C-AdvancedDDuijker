@@ -25,14 +25,14 @@ namespace AirBnB.Repositories
             _context.Images.Remove(image);
         }
 
-        public IEnumerable<Image> GetAll()
+        public async Task<IEnumerable<Image>> GetAll()
         {
-            return _context.Images.ToList();
+            return await _context.Images.ToListAsync();
         }
 
-        public Image GetById(int id)
+        public async Task<Image> GetById(int id)
         {
-            return _context.Images.Find(id);
+            return await _context.Images.FindAsync(id);
         }
 
         public void Save()

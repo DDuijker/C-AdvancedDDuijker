@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Text.Json.Serialization;
 
 public class Program
 {
@@ -41,6 +42,12 @@ public class Program
         builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
         builder.Services.AddScoped<ILocationRepository, LocationRepository>();
         builder.Services.AddScoped<ILocationService, LocationService>();
+        builder.Services.AddControllers().AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+        });
+
+
         //Mapping
         var config = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationDTO>());
         var config2 = new MapperConfiguration(cfg => cfg.CreateMap<LocationDTOv2, Location>());
@@ -65,6 +72,7 @@ public class Program
         });
 
         var app = builder.Build();
+
 
         // Configure the HTTP request pipeline.
         if (app.Environment.IsDevelopment())
