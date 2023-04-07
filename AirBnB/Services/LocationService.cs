@@ -34,9 +34,9 @@
             return await _locationRepository.GetAll();
         }
 
-        Location ILocationService.GetSpecificLocation(int locationId)
+        public async Task<Location> GetSpecificLocation(int locationId)
         {
-            return _locationRepository.GetById(locationId);
+            return await _locationRepository.GetById(locationId);
         }
     }
 }

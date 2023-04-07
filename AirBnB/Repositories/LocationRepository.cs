@@ -29,10 +29,10 @@
 
             return (await _context.Locations.Include(p => p.Landlord).Include(p => p.Images).ToListAsync());
         }
-        public Location GetById(int id)
+        public async Task<Location> GetById(int id)
         {
-            var location = _context.Locations.Find(id);
-            return location;
+            var location = _context.Locations.FindAsync(id);
+            return await location;
 
         }
         public void Save()

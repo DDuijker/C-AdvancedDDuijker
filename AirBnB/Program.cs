@@ -30,7 +30,6 @@ public class Program
         Console.WriteLine(builder.Host);
 
         // Add services to the container.
-
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         builder.Services.AddEndpointsApiExplorer();
@@ -40,8 +39,14 @@ public class Program
             options.SwaggerDoc("v2", new OpenApiInfo { Title = "AirBnB API", Version = "v2" });
         });
         builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
+        //configure repositories
+        builder.Services.AddScoped<IImageRepository, ImageRepository>();
         builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+        //configure services
         builder.Services.AddScoped<ILocationService, LocationService>();
+        builder.Services.AddScoped<IImageService, ImageService>();
+
+        //prevent circular reference
         builder.Services.AddControllers().AddJsonOptions(options =>
         {
             options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;

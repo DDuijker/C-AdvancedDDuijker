@@ -9,6 +9,7 @@ namespace AirBnB.Repositories
     public class ImageRepository : IImageRepository
     {
         private readonly AirBnBContext _context;
+
         public ImageRepository(AirBnBContext context)
         {
             _context = context;
@@ -32,7 +33,8 @@ namespace AirBnB.Repositories
 
         public async Task<Image> GetById(int id)
         {
-            return await _context.Images.FindAsync(id);
+            var image = await _context.Images.FindAsync(id);
+            return image;
         }
 
         public void Save()

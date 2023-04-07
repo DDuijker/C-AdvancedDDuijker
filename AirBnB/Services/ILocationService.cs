@@ -8,7 +8,7 @@ namespace AirBnB.Services
 
         public Task<IEnumerable<LocationDTOv2>> GetDTOv2Locations();
         public Task<IEnumerable<Location>> GetAllLocations();
-        public Location GetSpecificLocation(int locationId);
+        public Task<Location> GetSpecificLocation(int locationId);
 
 
     }

@@ -31,9 +31,9 @@ namespace AirBnB.Controllers.V2
 
         // GET: api/Locations/5
         [HttpGet("{id}")]
-        public Location GetLocation(int id)
+        public async Task<Location> GetLocation(int id)
         {
-            return _locationService.GetSpecificLocation(id);
+            return await _locationService.GetSpecificLocation(id);
         }
     }
 }

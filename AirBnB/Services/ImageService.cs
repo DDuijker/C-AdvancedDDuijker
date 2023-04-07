@@ -1,0 +1,33 @@
+﻿
+using AirBnB.Interfaces;
+using AirBnB.Models;
+using AirBnB.Models.DTO;
+using AutoMapper;
+namespace AirBnB.Services
+{
+    public class ImageService : IImageService
+    {
+        private readonly IImageRepository _imageRepository;
+        private readonly IMapper _mapper;
+
+        public ImageService(IImageRepository imageRepository, IMapper mapper)
+        {
+            _imageRepository = imageRepository;
+            _mapper = mapper;
+        }
+        public async Task<IEnumerable<ImageDTO>> GetAllDTOImages()
+        {
+            return (await _imageRepository.GetAll()).Select(image => _mapper.Map<Image, ImageDTO>(image));
+        }
+
+        public async Task<IEnumerable<Image>> GetAllImages()
+        {
+            return await _imageRepository.GetAll();
+        }
+
+        public async Task<Image> GetSpecificImage(int imageId)
+        {
+            return await _imageRepository.GetById(imageId);
+        }
+    }
+}

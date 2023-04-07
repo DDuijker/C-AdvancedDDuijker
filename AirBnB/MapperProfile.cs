@@ -14,6 +14,9 @@
                 .ForMember(dest => dest.LandlordAvatarURL, opt => opt.MapFrom(src => src.Landlord.Avatar.Url))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.PricePerDay))
                 .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.LocationType));
+
+            CreateMap<Image, ImageDTO>().ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.Url))
+                .ForMember(dest => dest.IsCover, opt => opt.MapFrom(src => src.IsCover));
         }
     }
 
