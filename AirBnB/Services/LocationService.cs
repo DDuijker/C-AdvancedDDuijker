@@ -39,5 +39,17 @@
         {
             return await _locationRepository.GetById(locationId, cancellationToken);
         }
+
+        public async Task<LocationDTO> GetDTOLocation(int locationId, CancellationToken cancellationToken)
+        {
+            var location = (await _locationRepository.GetById(locationId, cancellationToken));
+            return _mapper.Map<Location, LocationDTO>(location);
+        }
+
+        public async Task<LocationDTOv2> GetDTOv2Location(int locationId, CancellationToken cancellationToken)
+        {
+            var location = (await _locationRepository.GetById(locationId, cancellationToken));
+            return _mapper.Map<Location, LocationDTOv2>(location);
+        }
     }
 }
