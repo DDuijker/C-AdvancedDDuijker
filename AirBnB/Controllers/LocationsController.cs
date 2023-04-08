@@ -22,7 +22,11 @@ namespace AirBnB.Controllers
             _mapper = mapper;
         }
 
-
+        /// <summary>
+        /// Get the highest price of all the locations
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An ActionResult with the result</returns>
         [HttpGet]
         [Route("GetMaxPrice")]
         public async Task<ActionResult<int>> GetMaxPrice(CancellationToken cancellationToken)
@@ -37,6 +41,12 @@ namespace AirBnB.Controllers
             return Ok(maxPrice);
         }
 
+        /// <summary>
+        /// Get all the details of a locations via the LocationDetailDTO, ImageDTO and LandlordDTO
+        /// </summary>
+        /// <param name="locationId">The id from the location you want the details from</param>
+        /// <param name="cancellation">The cancellationtoken</param>
+        /// <returns>An ActionResult with the result</returns>
         [HttpGet]
         [Route("GetDetails/{locationId}")]
         public async Task<ActionResult<LocationDetailDTO>> GetDetails(int locationId, CancellationToken cancellation)
@@ -54,6 +64,12 @@ namespace AirBnB.Controllers
             return Ok(location);
         }
 
+        /// <summary>
+        /// Search through te locations and filter through the features of the location
+        /// </summary>
+        /// <param name="searchDTO">The location features </param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An ActionResult with the result</returns>
         [HttpPost]
         [Route("Search")]
         public async Task<ActionResult<IEnumerable<LocationDTOv2>>> Search(
