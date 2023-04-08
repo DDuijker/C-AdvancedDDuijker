@@ -33,7 +33,7 @@ namespace AirBnB.Repositories
 
         public async Task<Image> GetById(int id, CancellationToken cancellationToken)
         {
-            var image = await _context.Images.FindAsync(id);
+            var image = await _context.Images.FindAsync(new object[] { id }, cancellationToken);
             return image;
         }
 

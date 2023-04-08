@@ -16,7 +16,11 @@ namespace AirBnB.Controllers
             _reservationRepository = repository;
         }
 
-        // GET: api/Reservations
+        /// <summary>
+        /// Get all reservations
+        /// </summary>
+        /// <param name="cancellationTokens">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(CancellationToken cancellationTokens)
         {
@@ -24,7 +28,12 @@ namespace AirBnB.Controllers
             return Ok(reservations);
         }
 
-        // GET: api/Reservations/5
+        /// <summary>
+        /// Get a specific reservation by the id
+        /// </summary>
+        /// <param name="id">The ID of the reservation</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> GetReservation(int id, CancellationToken cancellationToken)
         {
@@ -38,8 +47,13 @@ namespace AirBnB.Controllers
             return reservation;
         }
 
-        // PUT: api/Reservations/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Update a reservation
+        /// </summary>
+        /// <param name="id">The id of the reservation you want to edit</param>
+        /// <param name="reservation">The new reservation data</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutReservation(int id, Reservation reservation, CancellationToken cancellationToken)
         {
@@ -69,8 +83,11 @@ namespace AirBnB.Controllers
             return NoContent();
         }
 
-        // POST: api/Reservations
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Add a reservation
+        /// </summary>
+        /// <param name="reservation">The data of the reservation you want to add</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
@@ -80,7 +97,12 @@ namespace AirBnB.Controllers
             return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
         }
 
-        // DELETE: api/Reservations/5
+        /// <summary>
+        /// Delete a reservation
+        /// </summary>
+        /// <param name="id">The id of the reservation you want to delete</param>
+        /// <param name="cancellationtoken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteReservation(int id, CancellationToken cancellationtoken)
         {
@@ -96,6 +118,12 @@ namespace AirBnB.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Check if the reservation exists
+        /// </summary>
+        /// <param name="id">the id of the reservation you want to check</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         private bool ReservationExists(int id, CancellationToken cancellationToken)
         {
             return _reservationRepository.GetById(id, cancellationToken) != null;

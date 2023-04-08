@@ -31,7 +31,7 @@
 
         public async Task<Reservation> GetById(int id, CancellationToken cancellationToken)
         {
-            return await _context.Reservations.FindAsync(id);
+            return await _context.Reservations.FindAsync(new object[] { id }, cancellationToken);
         }
 
         public void Save()

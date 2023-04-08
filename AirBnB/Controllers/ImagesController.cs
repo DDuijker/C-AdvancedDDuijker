@@ -21,20 +21,48 @@ namespace AirBnB.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Images
+        /// <summary>
+        /// Get all images 
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet]
-        public async Task<IEnumerable<ImageDTO>> GetImages(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<ImageDTO>>> GetImages(CancellationToken cancellationToken)
         {
-            return await _imageService.GetAllDTOImages(cancellationToken);
+            var images = await _imageService.GetAllDTOImages(cancellationToken);
+
+            if (images == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(images);
         }
 
+        /// <summary>
+        /// Get all the images
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet("GetAll")]
-        public async Task<IEnumerable<Image>> GetAllImages(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Image>>> GetAllImages(CancellationToken cancellationToken)
         {
-            return await _imageService.GetAllImages(cancellationToken);
+            var images = await _imageService.GetAllImages(cancellationToken);
+
+            if (images == null)
+            {
+                return NotFound();
+            }
+            return Ok(images);
         }
 
-        // GET: api/Images/5
+        /// <summary>
+        /// Get a specific image
+        /// </summary>
+        /// <param name="id">The id of the specific image you want to get</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionresult with the result</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Image>> GetImage(int id, CancellationToken cancellationToken)
         {
@@ -45,7 +73,7 @@ namespace AirBnB.Controllers
                 return NotFound();
             }
 
-            return image;
+            return Ok(image);
         }
 
 

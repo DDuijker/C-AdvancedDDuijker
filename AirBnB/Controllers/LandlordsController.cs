@@ -15,7 +15,11 @@ namespace AirBnB.Controllers
             _landlordRepository = repository;
         }
 
-        // GET: api/Landlords
+        /// <summary>
+        /// Get all landlords
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlords(CancellationToken cancellationToken)
         {

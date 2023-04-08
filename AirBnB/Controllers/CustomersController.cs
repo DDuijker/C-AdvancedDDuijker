@@ -16,14 +16,30 @@ namespace AirBnB.Controllers
             _customerRepository = customerRepository;
         }
 
-        // GET: api/Customers
+        /// <summary>
+        /// Get all customers
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult with an IEnumerable list of the customers</returns>
         [HttpGet]
-        public async Task<IEnumerable<Customer>> GetCustomers(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers(CancellationToken cancellationToken)
         {
-            return await _customerRepository.GetAll(cancellationToken);
+            var customers = await _customerRepository.GetAll(cancellationToken);
+
+            if (customers == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(customers);
         }
 
-        // GET: api/Customers/5
+        /// <summary>
+        /// Get a specific customer
+        /// </summary>
+        /// <param name="id">The id of the specific customer</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>The customer with the corresponding id</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id, CancellationToken cancellationToken)
         {
@@ -36,8 +52,14 @@ namespace AirBnB.Controllers
 
             return customer;
         }
-        // PUT: api/Customers/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+
+        /// <summary>
+        /// Update a customer
+        /// </summary>
+        /// <param name="id">The id of the customer you want to update</param>
+        /// <param name="customer">The data of the user you want to update</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>Nothing</returns>
         [HttpPut("{id}")]
         public async Task<IActionResult> PutCustomer(int id, Customer customer, CancellationToken cancellationToken)
         {
@@ -67,18 +89,28 @@ namespace AirBnB.Controllers
             return NoContent();
         }
 
-        // POST: api/Customers
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        /// <summary>
+        /// Create a new customer
+        /// </summary>
+        /// <param name="customer">The customer data</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
+
+
             _customerRepository.Add(customer);
             await _customerRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
         }
 
-        // DELETE: api/Customers/5
+        /// <summary>
+        /// Delete a customer
+        /// </summary>
+        /// <param name="id">The ID of the customer to delete</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteCustomer(int id, CancellationToken cancellationToken)
         {
@@ -94,6 +126,12 @@ namespace AirBnB.Controllers
             return NoContent();
         }
 
+        /// <summary>
+        /// Check if customer exists
+        /// </summary>
+        /// <param name="id">The ID of the customer to check</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>A true or false</returns>
         private bool CustomerExists(int id, CancellationToken cancellationToken)
         {
             return _customerRepository.GetById(id, cancellationToken) != null;

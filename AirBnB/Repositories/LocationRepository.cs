@@ -31,7 +31,7 @@
         }
         public async Task<Location> GetById(int id, CancellationToken cancellationToken)
         {
-            var location = _context.Locations.FindAsync(id);
+            var location = _context.Locations.FindAsync(new object[] { id }, cancellationToken);
             return await location;
 
         }

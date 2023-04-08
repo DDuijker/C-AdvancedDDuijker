@@ -27,7 +27,7 @@ namespace AirBnB.Repositories
         }
         public async Task<Customer> GetById(int id, CancellationToken cancellationToken)
         {
-            return await _context.Customers.FindAsync(id);
+            return await _context.Customers.FindAsync(new object[] { id }, cancellationToken);
         }
         public void Save()
         {

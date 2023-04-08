@@ -21,34 +21,61 @@ namespace AirBnB.Controllers
             _mapper = mapper;
         }
 
-        // GET: api/Locations
+        /// <summary>
+        /// Get all locations
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An ActionResult with the result</returns>
         [HttpGet]
-
-        public async Task<IEnumerable<LocationDTO>> GetLocations(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<LocationDTO>>> GetLocations(CancellationToken cancellationToken)
         {
 
-            return await _locationService.GetDTOLocations(cancellationToken);
+            var locations = await _locationService.GetDTOLocations(cancellationToken);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(locations);
         }
 
-        // GET: api/Locations/GetAll
+        /// <summary>
+        /// Get all locations, with the GetAll route 
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet("GetAll")]
-        public async Task<IEnumerable<Location>> GetAllLocations(CancellationToken cancellationToken)
+        public async Task<ActionResult<IEnumerable<Location>>> GetAllLocations(CancellationToken cancellationToken)
         {
-            return await _locationService.GetAllLocations(cancellationToken);
+            var locations = await _locationService.GetAllLocations(cancellationToken);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(locations);
+
         }
 
-        // GET: api/Locations/5
+        /// <summary>
+        /// Get a specific location
+        /// </summary>
+        /// <param name="id">The id of the location you want to get</param>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet("{id}")]
-        public async Task<Location> GetLocation(int id, CancellationToken cancellationToken)
+        public async Task<ActionResult<Location>> GetLocation(int id, CancellationToken cancellationToken)
         {
             var location = await _locationService.GetSpecificLocation(id, cancellationToken);
 
             if (location == null)
             {
-                return null;
+                return NotFound();
             }
 
-            return location;
+            return Ok(location);
         }
 
     }
