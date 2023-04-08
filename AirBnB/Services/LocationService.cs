@@ -51,5 +51,60 @@
             var location = (await _locationRepository.GetById(locationId, cancellationToken));
             return _mapper.Map<Location, LocationDTOv2>(location);
         }
+
+        public async Task<IEnumerable<LocationDTOv2>> SearchLocations(SearchDTO searchDTO, CancellationToken cancellationToken)
+        {
+            var locations = await _locationRepository.GetAll(cancellationToken);
+
+            if (searchDTO.Features != null)
+            {
+                locations = locations.Where(location => (int)location.Features == searchDTO.Features);
+            }
+
+            if (searchDTO.MinPrice != null)
+            {
+                locations = locations.Where(location => location.PricePerDay >= searchDTO.MinPrice);
+            }
+
+            if (searchDTO.MaxPrice != null)
+            {
+                locations = locations.Where(location => location.PricePerDay <= searchDTO.MaxPrice);
+            }
+
+            if (searchDTO.Type != null)
+            {
+                locations = locations.Where(location => (int)location.LocationType == searchDTO.Type);
+            }
+
+            if (searchDTO.Rooms != null)
+            {
+                locations = locations.Where(location => location.Rooms >= searchDTO.Rooms);
+            }
+
+            return locations.Select(location => _mapper.Map<LocationDTOv2>(location));
+        }
+
+        public async Task<PriceDTO> GetMaxPrice(CancellationToken cancellationToken)
+        {
+            var locations = await _locationRepository.GetAll(cancellationToken);
+
+            //Filter through the locations for the largest price
+            var price = locations.Max(l => l.PricePerDay);
+
+            var maxPrice = (int)Math.Ceiling(price);
+
+            var response = new PriceDTO { Price = (int)price };
+
+            return response;
+        }
+
+        public async Task<LocationDetailDTO> GetDetails(int id, CancellationToken cancellation)
+        {
+            var location = await _locationRepository.GetById(id, cancellation);
+
+            var mappedLocation = _mapper.Map<Location, LocationDetailDTO>(location);
+
+            return mappedLocation;
+        }
     }
 }

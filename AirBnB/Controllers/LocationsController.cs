@@ -3,6 +3,7 @@ using AirBnB.Models.DTO;
 using AirBnB.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace AirBnB.Controllers
 {
@@ -19,6 +20,55 @@ namespace AirBnB.Controllers
         {
             _locationService = locationService;
             _mapper = mapper;
+        }
+
+
+        [HttpGet]
+        [Route("GetMaxPrice")]
+        public async Task<ActionResult<int>> GetMaxPrice(CancellationToken cancellationToken)
+        {
+            var maxPrice = await _locationService.GetMaxPrice(cancellationToken);
+
+            if (maxPrice == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(maxPrice);
+        }
+
+        [HttpGet]
+        [Route("GetDetails/{locationId}")]
+        public async Task<ActionResult<LocationDetailDTO>> GetDetails(int locationId, CancellationToken cancellation)
+        {
+            //get the location with the id from the URL
+
+            var location = await _locationService.GetDetails(locationId, cancellation);
+
+            if (location == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(location);
+        }
+
+        [HttpPost]
+        [Route("Search")]
+        public async Task<ActionResult<IEnumerable<LocationDTOv2>>> Search(
+            [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] SearchDTO? searchDTO, CancellationToken cancellationToken)
+        {
+
+            var locations = await _locationService.SearchLocations(searchDTO, cancellationToken);
+
+            if (locations == null)
+            {
+                return NotFound();
+            }
+
+
+            return Ok(locations);
         }
 
         /// <summary>

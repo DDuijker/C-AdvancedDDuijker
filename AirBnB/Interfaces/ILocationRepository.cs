@@ -1,6 +1,7 @@
 ﻿namespace AirBnB.Interfaces
 {
     using AirBnB.Models;
+
     public interface ILocationRepository
     {
         public Task<IEnumerable<Location>> GetAll(CancellationToken cancellationToken);

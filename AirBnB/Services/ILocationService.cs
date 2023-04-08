@@ -11,6 +11,9 @@ namespace AirBnB.Services
         public Task<IEnumerable<Location>> GetAllLocations(CancellationToken cancellationToken);
         public Task<Location> GetSpecificLocation(int locationId, CancellationToken cancellationToken);
 
+        public Task<PriceDTO> GetMaxPrice(CancellationToken cancellationToken);
 
+        public Task<LocationDetailDTO> GetDetails(int id, CancellationToken cancellationToken);
+        public Task<IEnumerable<LocationDTOv2>> SearchLocations(SearchDTO searchDTO, CancellationToken cancellationToken);
     }
 }
