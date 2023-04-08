@@ -15,19 +15,19 @@ namespace AirBnB.Services
             _imageRepository = imageRepository;
             _mapper = mapper;
         }
-        public async Task<IEnumerable<ImageDTO>> GetAllDTOImages()
+        public async Task<IEnumerable<ImageDTO>> GetAllDTOImages(CancellationToken cancellationToken)
         {
-            return (await _imageRepository.GetAll()).Select(image => _mapper.Map<Image, ImageDTO>(image));
+            return (await _imageRepository.GetAll(cancellationToken)).Select(image => _mapper.Map<Image, ImageDTO>(image));
         }
 
-        public async Task<IEnumerable<Image>> GetAllImages()
+        public async Task<IEnumerable<Image>> GetAllImages(CancellationToken cancellationToken)
         {
-            return await _imageRepository.GetAll();
+            return await _imageRepository.GetAll(cancellationToken);
         }
 
-        public async Task<Image> GetSpecificImage(int imageId)
+        public async Task<Image> GetSpecificImage(int imageId, CancellationToken cancellationToken)
         {
-            return await _imageRepository.GetById(imageId);
+            return await _imageRepository.GetById(imageId, cancellationToken);
         }
     }
 }

@@ -8,6 +8,7 @@ namespace AirBnB.Controllers.V2
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
     //[Route("api/[controller]?api-version={version:apiVersion}")]
     [ApiVersion("2.0")]
 
@@ -15,6 +16,7 @@ namespace AirBnB.Controllers.V2
     {
         private readonly IMapper _mapper;
         private readonly ILocationService _locationService;
+
 
         public LocationsController(ILocationService locationService, IMapper mapper)
         {
@@ -24,16 +26,16 @@ namespace AirBnB.Controllers.V2
 
         // GET: api/Locations
         [HttpGet]
-        public async Task<IEnumerable<LocationDTOv2>> GetLocations()
+        public async Task<IEnumerable<LocationDTOv2>> GetLocations(CancellationToken cancellationToken)
         {
-            return await _locationService.GetDTOv2Locations();
+            return await _locationService.GetDTOv2Locations(cancellationToken);
         }
 
         // GET: api/Locations/5
         [HttpGet("{id}")]
-        public async Task<Location> GetLocation(int id)
+        public async Task<Location> GetLocation(int id, CancellationToken cancellationToken)
         {
-            return await _locationService.GetSpecificLocation(id);
+            return await _locationService.GetSpecificLocation(id, cancellationToken);
         }
     }
 }

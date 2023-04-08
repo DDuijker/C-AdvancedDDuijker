@@ -4,11 +4,11 @@ namespace AirBnB.Services
 {
     public interface ILocationService
     {
-        public Task<IEnumerable<LocationDTO>> GetDTOLocations();
+        public Task<IEnumerable<LocationDTO>> GetDTOLocations(CancellationToken cancellationToken);
 
-        public Task<IEnumerable<LocationDTOv2>> GetDTOv2Locations();
-        public Task<IEnumerable<Location>> GetAllLocations();
-        public Task<Location> GetSpecificLocation(int locationId);
+        public Task<IEnumerable<LocationDTOv2>> GetDTOv2Locations(CancellationToken cancellationToken);
+        public Task<IEnumerable<Location>> GetAllLocations(CancellationToken cancellationToken);
+        public Task<Location> GetSpecificLocation(int locationId, CancellationToken cancellationToken);
 
 
     }

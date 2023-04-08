@@ -25,15 +25,15 @@
             _context.Landlords.Remove(landlord);
         }
 
-        public async Task<IEnumerable<Landlord>> GetAll()
+        public async Task<IEnumerable<Landlord>> GetAll(CancellationToken cancellationToken)
         {
-            var result = await _context.Landlords.ToListAsync();
+            var result = await _context.Landlords.ToListAsync(cancellationToken);
             return result;
         }
 
-        public async Task<Landlord> GetById(int id)
+        public async Task<Landlord> GetById(int id, CancellationToken cancellationToken)
         {
-            return await _context.Landlords.FindAsync(id);
+            return await _context.Landlords.SingleOrDefaultAsync(l => l.Id == id, cancellationToken);
         }
 
         public void Save()
@@ -47,3 +47,4 @@
         }
     }
 }
+

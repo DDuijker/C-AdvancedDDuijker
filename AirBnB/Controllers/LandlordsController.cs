@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AirBnB.Interfaces;
 using AirBnB.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AirBnB.Controllers
 {
@@ -13,25 +8,30 @@ namespace AirBnB.Controllers
     [ApiController]
     public class LandlordsController : ControllerBase
     {
-        private readonly AirBnBContext _context;
+        private readonly ILandlordRepository _landlordRepository;
 
-        public LandlordsController(AirBnBContext context)
+        public LandlordsController(ILandlordRepository repository)
         {
-            _context = context;
+            _landlordRepository = repository;
         }
 
         // GET: api/Landlords
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlords()
+        public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlords(CancellationToken cancellationToken)
         {
-            return await _context.Landlords.ToListAsync();
+            var result = await _landlordRepository.GetAll(cancellationToken);
+            if (result == null)
+            {
+                return NotFound();
+            }
+            return Ok(result);
         }
 
         // GET: api/Landlords/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Landlord>> GetLandlord(int id)
+        public async Task<ActionResult<Landlord>> GetLandlord(int id, CancellationToken cancellationToken)
         {
-            var landlord = await _context.Landlords.FindAsync(id);
+            var landlord = await _landlordRepository.GetById(id, cancellationToken);
 
             if (landlord == null)
             {
@@ -41,67 +41,68 @@ namespace AirBnB.Controllers
             return landlord;
         }
 
-        // PUT: api/Landlords/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLandlord(int id, Landlord landlord)
-        {
-            if (id != landlord.Id)
-            {
-                return BadRequest();
-            }
 
-            _context.Entry(landlord).State = EntityState.Modified;
+        //// PUT: api/Landlords/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutLandlord(int id, Landlord landlord, CancellationToken cancellationToken)
+        //{
+        //    if (id != landlord.Id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LandlordExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    _landlordRepository.Entry(landlord).State = EntityState.Modified;
 
-            return NoContent();
-        }
+        //    try
+        //    {
+        //        await _landlordRepository.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!LandlordExists(id, cancellationToken))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-        // POST: api/Landlords
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Landlord>> PostLandlord(Landlord landlord)
-        {
-            _context.Landlords.Add(landlord);
-            await _context.SaveChangesAsync();
+        //    return NoContent();
+        //}
 
-            return CreatedAtAction("GetLandlord", new { id = landlord.Id }, landlord);
-        }
+        //// POST: api/Landlords
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPost]
+        //public async Task<ActionResult<Landlord>> PostLandlord(Landlord landlord)
+        //{
+        //    _landlordRepository.Landlords.Add(landlord);
+        //    await _landlordRepository.SaveChangesAsync();
 
-        // DELETE: api/Landlords/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLandlord(int id)
-        {
-            var landlord = await _context.Landlords.FindAsync(id);
-            if (landlord == null)
-            {
-                return NotFound();
-            }
+        //    return CreatedAtAction("GetLandlord", new { id = landlord.Id }, landlord);
+        //}
 
-            _context.Landlords.Remove(landlord);
-            await _context.SaveChangesAsync();
+        //// DELETE: api/Landlords/5
+        //[HttpDelete("{id}")]
+        //public async Task<IActionResult> DeleteLandlord(int id)
+        //{
+        //    var landlord = await _landlordRepository.Landlords.FindAsync(id);
+        //    if (landlord == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return NoContent();
-        }
+        //    _landlordRepository.Landlords.Remove(landlord);
+        //    await _landlordRepository.SaveChangesAsync();
 
-        private bool LandlordExists(int id)
-        {
-            return _context.Landlords.Any(e => e.Id == id);
-        }
+        //    return NoContent();
+        //}
+
+        //private bool LandlordExists(int id, CancellationToken cancellationToken)
+        //{
+        //    return _landlordRepository.GetById(id, cancellationToken) != null;
+        //}
     }
 }

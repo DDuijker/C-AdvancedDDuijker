@@ -17,26 +17,27 @@
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<LocationDTO>> GetDTOLocations()
+        public async Task<IEnumerable<LocationDTO>> GetDTOLocations(CancellationToken cancellationToken)
         {
 
-            return (await _locationRepository.GetAll()).Select(location => _mapper.Map<Location, LocationDTO>(location));
+            var locations = (await _locationRepository.GetAll(cancellationToken));
+            return locations.Select(location => _mapper.Map<Location, LocationDTO>(location));
         }
 
-        public async Task<IEnumerable<LocationDTOv2>> GetDTOv2Locations()
+        public async Task<IEnumerable<LocationDTOv2>> GetDTOv2Locations(CancellationToken cancellationToken)
         {
-            return (await _locationRepository.GetAll()).Select(location => _mapper.Map<Location, LocationDTOv2>(location));
+            return (await _locationRepository.GetAll(cancellationToken)).Select(location => _mapper.Map<Location, LocationDTOv2>(location));
         }
 
-        public async Task<IEnumerable<Location>> GetAllLocations()
+        public async Task<IEnumerable<Location>> GetAllLocations(CancellationToken cancellationToken)
         {
 
-            return await _locationRepository.GetAll();
+            return await _locationRepository.GetAll(cancellationToken);
         }
 
-        public async Task<Location> GetSpecificLocation(int locationId)
+        public async Task<Location> GetSpecificLocation(int locationId, CancellationToken cancellationToken)
         {
-            return await _locationRepository.GetById(locationId);
+            return await _locationRepository.GetById(locationId, cancellationToken);
         }
     }
 }

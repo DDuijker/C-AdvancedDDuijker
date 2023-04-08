@@ -24,12 +24,12 @@
             _context.Reservations.Remove(reservation);
         }
 
-        public async Task<IEnumerable<Reservation>> GetAll()
+        public async Task<IEnumerable<Reservation>> GetAll(CancellationToken cancellationToken)
         {
-            return await _context.Reservations.ToListAsync();
+            return await _context.Reservations.ToListAsync(cancellationToken);
         }
 
-        public async Task<Reservation> GetById(int id)
+        public async Task<Reservation> GetById(int id, CancellationToken cancellationToken)
         {
             return await _context.Reservations.FindAsync(id);
         }
@@ -37,6 +37,11 @@
         public void Save()
         {
             _context.SaveChanges();
+        }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
         }
 
         public void Update(Reservation reservation)

@@ -8,10 +8,5 @@
 
         public bool IsCover { get; set; }
 
-        public virtual Location Location { get; set; }
-
-        public virtual Landlord? Landlord { get; set; }
-
-
     }
 }

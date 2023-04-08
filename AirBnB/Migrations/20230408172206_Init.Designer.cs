@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirBnB.Migrations
 {
     [DbContext(typeof(AirBnBContext))]
-    [Migration("20230407211420_MadeAsync")]
-    partial class MadeAsync
+    [Migration("20230408172206_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -75,7 +75,7 @@ namespace AirBnB.Migrations
                     b.Property<bool>("IsCover")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LocationId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<string>("Url")
@@ -93,14 +93,12 @@ namespace AirBnB.Migrations
                         {
                             Id = 1,
                             IsCover = false,
-                            LocationId = 1,
                             Url = "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg"
                         },
                         new
                         {
                             Id = 2,
                             IsCover = false,
-                            LocationId = 2,
                             Url = "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg"
                         },
                         new
@@ -151,9 +149,7 @@ namespace AirBnB.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AvatarId")
-                        .IsUnique()
-                        .HasFilter("[AvatarId] IS NOT NULL");
+                    b.HasIndex("AvatarId");
 
                     b.ToTable("Landlords");
 
@@ -307,20 +303,16 @@ namespace AirBnB.Migrations
 
             modelBuilder.Entity("AirBnB.Models.Image", b =>
                 {
-                    b.HasOne("AirBnB.Models.Location", "Location")
+                    b.HasOne("AirBnB.Models.Location", null)
                         .WithMany("Images")
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Location");
+                        .HasForeignKey("LocationId");
                 });
 
             modelBuilder.Entity("AirBnB.Models.Landlord", b =>
                 {
                     b.HasOne("AirBnB.Models.Image", "Avatar")
-                        .WithOne("Landlord")
-                        .HasForeignKey("AirBnB.Models.Landlord", "AvatarId");
+                        .WithMany()
+                        .HasForeignKey("AvatarId");
 
                     b.Navigation("Avatar");
                 });
@@ -356,11 +348,6 @@ namespace AirBnB.Migrations
             modelBuilder.Entity("AirBnB.Models.Customer", b =>
                 {
                     b.Navigation("Reservations");
-                });
-
-            modelBuilder.Entity("AirBnB.Models.Image", b =>
-                {
-                    b.Navigation("Landlord");
                 });
 
             modelBuilder.Entity("AirBnB.Models.Landlord", b =>

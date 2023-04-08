@@ -1,4 +1,5 @@
-﻿using AirBnB.Models;
+﻿using AirBnB.Interfaces;
+using AirBnB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -8,25 +9,25 @@ namespace AirBnB.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly AirBnBContext _context;
+        private readonly ICustomerRepository _customerRepository;
 
-        public CustomersController(AirBnBContext context)
+        public CustomersController(ICustomerRepository customerRepository)
         {
-            _context = context;
+            _customerRepository = customerRepository;
         }
 
         // GET: api/Customers
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers()
+        public async Task<IEnumerable<Customer>> GetCustomers(CancellationToken cancellationToken)
         {
-            return await _context.Customers.ToListAsync();
+            return await _customerRepository.GetAll(cancellationToken);
         }
 
         // GET: api/Customers/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Customer>> GetCustomer(int id)
+        public async Task<ActionResult<Customer>> GetCustomer(int id, CancellationToken cancellationToken)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _customerRepository.GetById(id, cancellationToken);
 
             if (customer == null)
             {
@@ -35,26 +36,25 @@ namespace AirBnB.Controllers
 
             return customer;
         }
-
         // PUT: api/Customers/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer)
+        public async Task<IActionResult> PutCustomer(int id, Customer customer, CancellationToken cancellationToken)
         {
             if (id != customer.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(customer).State = EntityState.Modified;
+            _customerRepository.Add(customer);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _customerRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!CustomerExists(id))
+                if (!CustomerExists(id, cancellationToken))
                 {
                     return NotFound();
                 }
@@ -72,31 +72,31 @@ namespace AirBnB.Controllers
         [HttpPost]
         public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
         {
-            _context.Customers.Add(customer);
-            await _context.SaveChangesAsync();
+            _customerRepository.Add(customer);
+            await _customerRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
         }
 
         // DELETE: api/Customers/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id)
+        public async Task<IActionResult> DeleteCustomer(int id, CancellationToken cancellationToken)
         {
-            var customer = await _context.Customers.FindAsync(id);
+            var customer = await _customerRepository.GetById(id, cancellationToken);
             if (customer == null)
             {
                 return NotFound();
             }
 
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
+            _customerRepository.Delete(id);
+            await _customerRepository.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool CustomerExists(int id)
+        private bool CustomerExists(int id, CancellationToken cancellationToken)
         {
-            return _context.Customers.Any(e => e.Id == id);
+            return _customerRepository.GetById(id, cancellationToken) != null;
         }
     }
 }

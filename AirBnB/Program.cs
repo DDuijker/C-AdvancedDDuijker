@@ -42,6 +42,9 @@ public class Program
         //configure repositories
         builder.Services.AddScoped<IImageRepository, ImageRepository>();
         builder.Services.AddScoped<ILocationRepository, LocationRepository>();
+        builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+        builder.Services.AddScoped<ILandlordRepository, LandlordRepository>();
+        builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
         //configure services
         builder.Services.AddScoped<ILocationService, LocationService>();
         builder.Services.AddScoped<IImageService, ImageService>();

@@ -21,11 +21,11 @@ namespace AirBnB.Repositories
             var customer = _context.Customers.Find(id);
             _context.Customers.Remove(customer);
         }
-        public async Task<IEnumerable<Customer>> GetAll()
+        public async Task<IEnumerable<Customer>> GetAll(CancellationToken cancellationToken)
         {
-            return (await _context.Customers.ToListAsync());
+            return (await _context.Customers.ToListAsync(cancellationToken));
         }
-        public async Task<Customer> GetById(int id)
+        public async Task<Customer> GetById(int id, CancellationToken cancellationToken)
         {
             return await _context.Customers.FindAsync(id);
         }
@@ -33,6 +33,12 @@ namespace AirBnB.Repositories
         {
             _context.SaveChanges();
         }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
+
         public void Update(Customer customer)
         {
             _context.Customers.Update(customer);

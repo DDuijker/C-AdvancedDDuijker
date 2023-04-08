@@ -8,7 +8,6 @@ namespace AirBnB.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    //[Route("api/[controller]?api-version={version:apiVersion}")]
     [ApiVersion("1.0")]
 
     public class LocationsController : ControllerBase
@@ -25,24 +24,24 @@ namespace AirBnB.Controllers
         // GET: api/Locations
         [HttpGet]
 
-        public async Task<IEnumerable<LocationDTO>> GetLocations()
+        public async Task<IEnumerable<LocationDTO>> GetLocations(CancellationToken cancellationToken)
         {
 
-            return await _locationService.GetDTOLocations();
+            return await _locationService.GetDTOLocations(cancellationToken);
         }
 
         // GET: api/Locations/GetAll
         [HttpGet("GetAll")]
-        public async Task<IEnumerable<Location>> GetAllLocations()
+        public async Task<IEnumerable<Location>> GetAllLocations(CancellationToken cancellationToken)
         {
-            return await _locationService.GetAllLocations();
+            return await _locationService.GetAllLocations(cancellationToken);
         }
 
         // GET: api/Locations/5
         [HttpGet("{id}")]
-        public async Task<Location> GetLocation(int id)
+        public async Task<Location> GetLocation(int id, CancellationToken cancellationToken)
         {
-            var location = await _locationService.GetSpecificLocation(id);
+            var location = await _locationService.GetSpecificLocation(id, cancellationToken);
 
             if (location == null)
             {

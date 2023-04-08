@@ -13,8 +13,6 @@
 
         public string Phone { get; set; }
 
-        public int? AvatarId { get; set; }
-
         public virtual Image? Avatar { get; set; }
 
         public virtual List<Location> Locations { get; set; }

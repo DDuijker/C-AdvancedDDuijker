@@ -3,14 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace AirBnB.Migrations
 {
-    /// <inheritdoc />
     public partial class Init : Migration
     {
-        /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
@@ -36,7 +32,7 @@ namespace AirBnB.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Url = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsCover = table.Column<bool>(type: "bit", nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: false)
+                    LocationId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -126,26 +122,8 @@ namespace AirBnB.Migrations
                 columns: new[] { "Id", "Email", "FirstName", "LastName" },
                 values: new object[,]
                 {
-                    { 1, "Bilal.youssry@gmail.com", "Bilal", "Yousef" },
-                    { 2, "maxmetz8@gmail.com", "Max", "Metz" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Landlords",
-                columns: new[] { "Id", "Age", "AvatarId", "Email", "FirstName", "LastName", "Phone" },
-                values: new object[,]
-                {
-                    { 1, 55, null, "herman@gmail.com", "Herman ", "Mol", "12345678" },
-                    { 2, 61, null, "Jaap@gmail.com", "Jaap", "Keizer", "12345678" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Locations",
-                columns: new[] { "Id", "Description", "Features", "LandlordId", "LocationType", "NumberOfGuests", "PricePerDay", "Rooms", "SubTitle", "Title" },
-                values: new object[,]
-                {
-                    { 1, "Mooi huis gelegen in het centrum", 1, 1, 0, 3, 50.99f, 3, "Huis word al jaren goed bevonden door 100+ klanten", "BeeldhouwerKasteel" },
-                    { 2, "Prachtig kasteel van Nederland", 1, 2, 5, 20, 500.99f, 4, "Prijzig, maar een echte ervaring.", "Kasteel" }
+                    { 1, "djoekeduijker@live.nl", "Djoeke", "Duijker" },
+                    { 2, "theoharissgouridis@gmail,com", "Theoharis", "Sgouridis" }
                 });
 
             migrationBuilder.InsertData(
@@ -153,10 +131,37 @@ namespace AirBnB.Migrations
                 columns: new[] { "Id", "IsCover", "LocationId", "Url" },
                 values: new object[,]
                 {
-                    { 1, false, 1, "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg" },
-                    { 2, false, 2, "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg" },
-                    { 3, true, 1, "https://www.chr-apartments.com/sites/default/files/styles/tile_image_cropped/public/video_thumbnails/Rwiy-8x8o5w.jpg?itok=X0MqiZeY" },
-                    { 4, true, 2, "https://www.mapofjoy.nl/wp-content/uploads/2022/11/kasteel-de-haar-mapofjoy.jpg" }
+                    { 1, false, null, "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg" },
+                    { 2, false, null, "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Landlords",
+                columns: new[] { "Id", "Age", "AvatarId", "Email", "FirstName", "LastName", "Phone" },
+                values: new object[] { 1, 55, 1, "keesvdspek@gmail.com", "Kees", "van der Spek", "12345678" });
+
+            migrationBuilder.InsertData(
+                table: "Landlords",
+                columns: new[] { "Id", "Age", "AvatarId", "Email", "FirstName", "LastName", "Phone" },
+                values: new object[] { 2, 61, 2, "geertjan@gmail.com", "Geert-Jan", "Barends", "12345678" });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "Id", "Description", "Features", "LandlordId", "LocationType", "NumberOfGuests", "PricePerDay", "Rooms", "SubTitle", "Title" },
+                values: new object[] { 1, "Huis in het centrum", 32, 1, 0, 3, 50.99f, 3, "Huis word al jaren goed bevonden door 100+ klanten", "Almere Apartement" });
+
+            migrationBuilder.InsertData(
+                table: "Locations",
+                columns: new[] { "Id", "Description", "Features", "LandlordId", "LocationType", "NumberOfGuests", "PricePerDay", "Rooms", "SubTitle", "Title" },
+                values: new object[] { 2, "Boerderij huisje, lekker afgelegen en dieren zijn toegestaan", 2, 2, 5, 10, 500.99f, 4, "Prijzig, maar een echte landelijke ervaring.", "Woonboerderij" });
+
+            migrationBuilder.InsertData(
+                table: "Images",
+                columns: new[] { "Id", "IsCover", "LocationId", "Url" },
+                values: new object[,]
+                {
+                    { 3, true, 1, "https://www.integervastgoed.nl/img/oasis-city-almere-1.png" },
+                    { 4, true, 2, "https://assets-global.website-files.com/604668223c6f81ba87398bd4/60a2585a0441561aaca31be4_vooraanzicht%20woning.jpg" }
                 });
 
             migrationBuilder.InsertData(
@@ -176,9 +181,7 @@ namespace AirBnB.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Landlords_AvatarId",
                 table: "Landlords",
-                column: "AvatarId",
-                unique: true,
-                filter: "[AvatarId] IS NOT NULL");
+                column: "AvatarId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Locations_LandlordId",
@@ -200,11 +203,9 @@ namespace AirBnB.Migrations
                 table: "Images",
                 column: "LocationId",
                 principalTable: "Locations",
-                principalColumn: "Id",
-                onDelete: ReferentialAction.Cascade);
+                principalColumn: "Id");
         }
 
-        /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(

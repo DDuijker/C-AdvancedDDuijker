@@ -14,9 +14,6 @@ public class AirBnBContext : DbContext
         optionsBuilder.UseLazyLoadingProxies();
         optionsBuilder.UseSqlServer("Data Source=(LocalDb)\\MSSQLLocalDB;Initial Catalog=AirbnbDB;Integrated Security=SSPI;");
         base.OnConfiguring(optionsBuilder);
-
-
-
     }
     public DbSet<Landlord> Landlords { get; set; } = default!;
 
@@ -38,13 +35,9 @@ public class AirBnBContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-
-
-
-        modelBuilder.Entity<Image>().HasOne(i => i.Landlord).WithOne(l => l.Avatar).HasForeignKey<Landlord>(i => i.AvatarId);
+        //modelBuilder.Entity<Landlord>().HasMany(l => l.Locations).WithOne(l => l.Landlord).HasForeignKey(l => l.LandlordId);
+        //modelBuilder.Entity<Image>().HasOne(i => i.Landlord).WithOne(l => l.Avatar).HasForeignKey<Landlord>(i => i.AvatarId);
         base.OnModelCreating(modelBuilder);
-
-
 
         modelBuilder.Entity<Customer>().HasData(
         new { FirstName = "Djoeke", LastName = "Duijker", Email = "djoekeduijker@live.nl", Age = 20, Phone = "062003882", Id = 1 },
@@ -73,8 +66,8 @@ public class AirBnBContext : DbContext
 
 
         modelBuilder.Entity<Image>().HasData(
-        new { Id = 1, IsCover = false, Url = "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg", LocationId = 1 },
-        new { Id = 2, IsCover = false, Url = "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg", LocationId = 2 },
+        new { Id = 1, IsCover = false, Url = "https://dq1eylutsoz4u.cloudfront.net/2019/12/20060024/adult-man-baby-boomer-clean-cut_t20_b8wV6V-800x600-50-year-old-man.jpg" },
+        new { Id = 2, IsCover = false, Url = "https://as1.ftcdn.net/v2/jpg/04/70/50/70/1000_F_470507000_FxGToXZnkwPgMYAc5KdX9SvtlYLjPhKf.jpg" },
         new { Id = 3, IsCover = true, Url = "https://www.integervastgoed.nl/img/oasis-city-almere-1.png", LocationId = 1 },
         new { Id = 4, IsCover = true, Url = "https://assets-global.website-files.com/604668223c6f81ba87398bd4/60a2585a0441561aaca31be4_vooraanzicht%20woning.jpg", LocationId = 2 }
 
@@ -103,6 +96,7 @@ public class AirBnBContext : DbContext
 
 
     }
+
 }
 
 

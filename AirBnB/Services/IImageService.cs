@@ -5,10 +5,10 @@ namespace AirBnB.Services
 {
     public interface IImageService
     {
-        public Task<IEnumerable<Image>> GetAllImages();
-        public Task<IEnumerable<ImageDTO>> GetAllDTOImages();
+        public Task<IEnumerable<Image>> GetAllImages(CancellationToken cancellationToken);
+        public Task<IEnumerable<ImageDTO>> GetAllDTOImages(CancellationToken cancellationToken);
 
-        public Task<Image> GetSpecificImage(int imageId);
+        public Task<Image> GetSpecificImage(int imageId, CancellationToken cancellationToken);
 
 
     }

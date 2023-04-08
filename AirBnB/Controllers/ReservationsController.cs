@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+﻿using AirBnB.Interfaces;
+using AirBnB.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using AirBnB.Models;
 
 namespace AirBnB.Controllers
 {
@@ -13,25 +9,26 @@ namespace AirBnB.Controllers
     [ApiController]
     public class ReservationsController : ControllerBase
     {
-        private readonly AirBnBContext _context;
+        private readonly IReservationRepository _reservationRepository;
 
-        public ReservationsController(AirBnBContext context)
+        public ReservationsController(IReservationRepository repository)
         {
-            _context = context;
+            _reservationRepository = repository;
         }
 
         // GET: api/Reservations
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations()
+        public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(CancellationToken cancellationTokens)
         {
-            return await _context.Reservations.ToListAsync();
+            var reservations = await _reservationRepository.GetAll(cancellationTokens);
+            return Ok(reservations);
         }
 
         // GET: api/Reservations/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Reservation>> GetReservation(int id)
+        public async Task<ActionResult<Reservation>> GetReservation(int id, CancellationToken cancellationToken)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await _reservationRepository.GetById(id, cancellationToken);
 
             if (reservation == null)
             {
@@ -44,22 +41,22 @@ namespace AirBnB.Controllers
         // PUT: api/Reservations/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutReservation(int id, Reservation reservation)
+        public async Task<IActionResult> PutReservation(int id, Reservation reservation, CancellationToken cancellationToken)
         {
             if (id != reservation.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(reservation).State = EntityState.Modified;
+            _reservationRepository.Update(reservation);
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _reservationRepository.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ReservationExists(id))
+                if (!ReservationExists(id, cancellationToken))
                 {
                     return NotFound();
                 }
@@ -77,31 +74,31 @@ namespace AirBnB.Controllers
         [HttpPost]
         public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
         {
-            _context.Reservations.Add(reservation);
-            await _context.SaveChangesAsync();
+            _reservationRepository.Add(reservation);
+            await _reservationRepository.SaveChangesAsync();
 
             return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
         }
 
         // DELETE: api/Reservations/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReservation(int id)
+        public async Task<IActionResult> DeleteReservation(int id, CancellationToken cancellationtoken)
         {
-            var reservation = await _context.Reservations.FindAsync(id);
+            var reservation = await _reservationRepository.GetById(id, cancellationtoken);
             if (reservation == null)
             {
                 return NotFound();
             }
 
-            _context.Reservations.Remove(reservation);
-            await _context.SaveChangesAsync();
+            _reservationRepository.Delete(id);
+            await _reservationRepository.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool ReservationExists(int id)
+        private bool ReservationExists(int id, CancellationToken cancellationToken)
         {
-            return _context.Reservations.Any(e => e.Id == id);
+            return _reservationRepository.GetById(id, cancellationToken) != null;
         }
     }
 }

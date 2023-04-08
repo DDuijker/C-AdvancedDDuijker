@@ -6,11 +6,6 @@
 
         public virtual Location Location { get; set; }
 
-        public int LocationId { get; set; }
-
-
-        public int CustomerId { get; set; }
-
         public virtual Customer Customer { get; set; }
 
         public float Discount { get; set; }
