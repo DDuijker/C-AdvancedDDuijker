@@ -7,7 +7,8 @@
     {
         public MapperProfile()
         {
-            CreateMap<Location, LocationDTO>().ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.Images.Find(i => i.IsCover).Url))
+            CreateMap<Location, LocationDTO>()
+                .ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.Images.Find(i => i.IsCover).Url))
                 .ForMember(dest => dest.LandlordAvatarURL, opt => opt.MapFrom(src => src.Landlord.Avatar.Url));
 
             CreateMap<Location, LocationDTOv2>().ForMember(dest => dest.ImageURL, opt => opt.MapFrom(src => src.Images.Find(i => i.IsCover).Url))
@@ -39,6 +40,22 @@
 
             CreateMap<DateOnly, UnAvailableDatesDTO>()
              .ForMember(dest => dest.UnAvailableDates, opt => opt.MapFrom(src => src));
+
+            CreateMap<Reservation, ReservationRequestDTO>()
+                .ForMember(dest => dest.StartDate, opt => opt.MapFrom(src => src.StartDate))
+                .ForMember(dest => dest.EndDate, opt => opt.MapFrom(src => src.EndDate))
+                .ForMember(dest => dest.LocationId, opt => opt.MapFrom(src => src.Location.Id))
+                .ForMember(dest => dest.Discount, opt => opt.MapFrom(src => src.Discount))
+                .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Customer.Email))
+                .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Customer.FirstName))
+                .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Customer.LastName));
+
+            CreateMap<Reservation, ReservationResponseDTO>()
+                .ForMember(dest => dest.LocationName, opt => opt.MapFrom(src => src.Location.Title))
+                .ForMember(dest => dest.CustomerName, opt => opt.MapFrom(src => src.Customer.FirstName + " " + src.Customer.LastName))
+                .ForMember(dest => dest.Price, opt => opt.MapFrom(src => (src.Location.PricePerDay * (src.EndDate - src.StartDate).Days) - src.Discount))
+                .ForMember(dest => dest.Discount, opt => opt.MapFrom(src => src.Discount));
+
 
         }
     }

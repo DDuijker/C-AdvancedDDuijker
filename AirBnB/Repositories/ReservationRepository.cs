@@ -8,9 +8,23 @@
     {
         private readonly AirBnBContext _context;
 
+
+
         public ReservationRepository(AirBnBContext context)
         {
             _context = context;
+        }
+
+        public async Task<Customer> GetCustomerByEmail(string email, CancellationToken cancellationToken)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email, cancellationToken);
+            return customer;
+        }
+
+        public async Task<Location> GetLocationById(int id, CancellationToken cancellationToken)
+        {
+            var location = await _context.Locations.FirstOrDefaultAsync(l => l.Id == id, cancellationToken);
+            return location;
         }
 
         public void Add(Reservation reservation)

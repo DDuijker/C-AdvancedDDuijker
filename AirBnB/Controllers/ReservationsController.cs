@@ -1,5 +1,6 @@
 ﻿using AirBnB.Interfaces;
 using AirBnB.Models;
+using AirBnB.Models.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -84,18 +85,55 @@ namespace AirBnB.Controllers
         }
 
         /// <summary>
-        /// Add a reservation
+        /// Check if a reservation exists
         /// </summary>
-        /// <param name="reservation">The data of the reservation you want to add</param>
-        /// <returns>An IActionResult representing the result of the operation</returns>
+        /// <param name="reservationRequestDTO">The request in DTO form, as follows:
+        /// {
+        ///"StartDate": DateTime,
+        ///"EndDate": DateTime,
+        ///"LocationId": int,
+        ///"Discount": float?, // optioneel
+        ///"Email": string,
+        ///"FirstName": string,
+        ///"LastName": string
+        ///  }
+        /// </param>
+        /// <param name="cancellation"></param>
+        /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<Reservation>> PostReservation(Reservation reservation)
+        public async Task<ActionResult<ReservationResponseDTO>> PostReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellation)
         {
+            //get customer by email
+            var customer = await _reservationRepository.GetCustomerByEmail(reservationRequestDTO.Email, cancellation);
+
+            var location = await _reservationRepository.GetLocationById(reservationRequestDTO.LocationId, cancellation);
+
+            var reservation = new Reservation
+            {
+                StartDate = reservationRequestDTO.StartDate,
+                EndDate = reservationRequestDTO.EndDate,
+                Discount = reservationRequestDTO.Discount ??= 0,
+                Customer = customer,
+                Location = location
+            };
+
             _reservationRepository.Add(reservation);
             await _reservationRepository.SaveChangesAsync();
 
-            return CreatedAtAction("GetReservation", new { id = reservation.Id }, reservation);
+            var price = location.PricePerDay * (reservation.EndDate - reservation.StartDate).Days;
+            var newPrice = price - (price * reservation.Discount / 100);
+
+            var response = new ReservationResponseDTO
+            {
+                LocationName = location.Title,
+                CustomerName = customer.FirstName + " " + customer.LastName,
+                Price = newPrice,
+                Discount = reservation.Discount
+            };
+
+            return response;
         }
+
 
         /// <summary>
         /// Delete a reservation
