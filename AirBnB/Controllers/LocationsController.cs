@@ -22,6 +22,21 @@ namespace AirBnB.Controllers
             _mapper = mapper;
         }
 
+        [HttpGet]
+        [Route("UnavailableDates/{locationId}")]
+        public async Task<ActionResult<IEnumerable<UnAvailableDatesDTO>>> GetUnavailableDates(int locationId, CancellationToken cancellationToken)
+        {
+            var unavailableDates = await _locationService.GetUnAvailableDates(locationId, cancellationToken);
+
+            if (unavailableDates == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(unavailableDates);
+        }
+
+
         /// <summary>
         /// Get the highest price of all the locations
         /// </summary>
@@ -39,6 +54,8 @@ namespace AirBnB.Controllers
             }
 
             return Ok(maxPrice);
+
+
         }
 
         /// <summary>

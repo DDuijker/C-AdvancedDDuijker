@@ -35,6 +35,11 @@
                 .ForMember(dest => dest.Features, opt => opt.MapFrom(src => src.Features))
                 .ForMember(dest => dest.Images, opt => opt.MapFrom(src => src.Images.Select(img => new ImageDTO { URL = img.Url, IsCover = img.IsCover })))
                 .ForMember(dest => dest.Landlord, opt => opt.MapFrom(src => new LandlordDTO { Name = src.Landlord.FirstName + " " + src.Landlord.LastName, Avatar = src.Landlord.Avatar.Url }));
+
+
+            CreateMap<DateOnly, UnAvailableDatesDTO>()
+             .ForMember(dest => dest.UnAvailableDates, opt => opt.MapFrom(src => src));
+
         }
     }
 

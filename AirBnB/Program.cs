@@ -45,6 +45,7 @@ public class Program
         builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
         builder.Services.AddScoped<ILandlordRepository, LandlordRepository>();
         builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
+
         //configure services
         builder.Services.AddScoped<ILocationService, LocationService>();
         builder.Services.AddScoped<IImageService, ImageService>();
@@ -59,8 +60,10 @@ public class Program
         //Mapping
         var config = new MapperConfiguration(cfg => cfg.CreateMap<Location, LocationDTO>());
         var config2 = new MapperConfiguration(cfg => cfg.CreateMap<LocationDTOv2, Location>());
+        var config3 = new MapperConfiguration(cfg => cfg.CreateMap<DateOnly, UnAvailableDatesDTO>());
         var mapper = config.CreateMapper();
         var mapper2 = config2.CreateMapper();
+        var mapper3 = config3.CreateMapper();
         builder.Services.AddAutoMapper(typeof(MapperProfile));
         builder.Services.AddAutoMapper(typeof(Program));
 

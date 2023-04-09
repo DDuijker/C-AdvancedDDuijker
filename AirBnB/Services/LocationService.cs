@@ -4,6 +4,7 @@
     using AirBnB.Models;
     using AirBnB.Models.DTO;
     using AutoMapper;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
 
@@ -106,6 +107,24 @@
             var mappedLocation = _mapper.Map<Location, LocationDetailDTO>(location);
 
             return mappedLocation;
+        }
+
+
+
+        public async Task<UnAvailableDatesDTO> GetUnAvailableDates(int locationId, CancellationToken cancellationToken)
+        {
+
+            var location = await _locationRepository.GetById(locationId, cancellationToken);
+
+            var reservations = location.Reservations;
+
+            var unavailableDates = reservations.SelectMany(r =>
+                 Enumerable.Range(0, (r.EndDate - r.StartDate).Days + 1)
+                     .Select(i => r.StartDate.AddDays(i))
+             ).ToList();
+
+            // Een automapper was hier overbodig omdat het om 1 veld ging, dus ik heb hier niet overheen gemapped
+            return new UnAvailableDatesDTO { UnAvailableDates = unavailableDates };
         }
     }
 }
