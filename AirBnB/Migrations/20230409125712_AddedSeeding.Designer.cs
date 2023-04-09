@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirBnB.Migrations
 {
     [DbContext(typeof(AirBnBContext))]
-    partial class AirBnBContextModelSnapshot : ModelSnapshot
+    [Migration("20230409125712_AddedSeeding")]
+    partial class AddedSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -56,7 +58,7 @@ namespace AirBnB.Migrations
                         new
                         {
                             Id = 2,
-                            Email = "theoharissgouridis@gmail.com",
+                            Email = "theoharissgouridis@gmail,com",
                             FirstName = "Theoharis",
                             LastName = "Sgouridis"
                         });
@@ -122,7 +124,7 @@ namespace AirBnB.Migrations
                         new
                         {
                             Id = 6,
-                            IsCover = true,
+                            IsCover = false,
                             LocationId = 3,
                             Url = "https://images.squarespace-cdn.com/content/v1/5b097b4a4cde7ab1c2125706/90f9b45a-0c57-44b0-a566-53e4359a817e/CathieHong_Bookins_2.jpg?format=300w"
                         },
@@ -250,20 +252,6 @@ namespace AirBnB.Migrations
                             IsCover = false,
                             LocationId = 10,
                             Url = "https://images.oyoroomscdn.com/uploads/hotel_image/100011873/medium/88812_lsr_202002084173854678.jpg"
-                        },
-                        new
-                        {
-                            Id = 25,
-                            IsCover = true,
-                            LocationId = 11,
-                            Url = "https://www.standout-cabin-designs.com/images/small-stone-cottages1a.jpg"
-                        },
-                        new
-                        {
-                            Id = 26,
-                            IsCover = false,
-                            LocationId = 11,
-                            Url = "https://usenaturalstone.org/wp-content/uploads/2016/03/Megy-Article-1.jpg"
                         });
                 });
 
@@ -510,19 +498,6 @@ namespace AirBnB.Migrations
                             Rooms = 3,
                             SubTitle = "Ideaal voor gezinnen of groepen vrienden",
                             Title = "Vakantiehuis met privétuin"
-                        },
-                        new
-                        {
-                            Id = 11,
-                            Description = "Een leuk uitje voor met zijn twee of een klein gezin",
-                            Features = 4,
-                            LandlordId = 3,
-                            LocationType = 1,
-                            NumberOfGuests = 3,
-                            PricePerDay = 30f,
-                            Rooms = 3,
-                            SubTitle = "Leuke cottage",
-                            Title = "Een stenen cottage"
                         });
                 });
 

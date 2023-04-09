@@ -18,7 +18,8 @@
             CreateMap<Image, ImageDTO>().ForMember(dest => dest.URL, opt => opt.MapFrom(src => src.Url))
                 .ForMember(dest => dest.IsCover, opt => opt.MapFrom(src => src.IsCover));
 
-            CreateMap<Landlord, LandlordDTO>().ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
+            CreateMap<Landlord, LandlordDTO>()
+                .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.FirstName + " " + src.LastName))
                 .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => src.Avatar.Url));
 
             CreateMap<Location, PriceDTO>().ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.PricePerDay));

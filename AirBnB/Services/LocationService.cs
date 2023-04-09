@@ -82,6 +82,7 @@
             }
 
             return locations.Select(location => _mapper.Map<LocationDTOv2>(location));
+
         }
 
         public async Task<PriceDTO> GetMaxPrice(CancellationToken cancellationToken)
@@ -91,7 +92,7 @@
             //Filter through the locations for the largest price
             var price = locations.Max(l => l.PricePerDay);
 
-            var maxPrice = (int)Math.Ceiling(price);
+            var maxPrice = (int)Math.Floor(price);
 
             var response = new PriceDTO { Price = (int)price };
 

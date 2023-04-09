@@ -31,7 +31,12 @@ namespace AirBnB.Controllers
             return Ok(result);
         }
 
-        // GET: api/Landlords/5
+        /// <summary>
+        /// Get a landlord by id
+        /// </summary>
+        /// <param name="id">The id of the landlord you want to get</param>
+        /// <param name="cancellationToken">The cancellationtoken</param>
+        /// <returns>The landlord or a notfound error</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Landlord>> GetLandlord(int id, CancellationToken cancellationToken)
         {

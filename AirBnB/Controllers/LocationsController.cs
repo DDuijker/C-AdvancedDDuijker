@@ -83,7 +83,6 @@ namespace AirBnB.Controllers
                 return NotFound();
             }
 
-
             return Ok(locations);
         }
 
