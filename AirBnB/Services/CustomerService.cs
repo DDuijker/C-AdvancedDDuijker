@@ -2,7 +2,6 @@
 using AirBnB.Models;
 using AirBnB.Models.DTO;
 using AutoMapper;
-
 namespace AirBnB.Services
 {
     public class CustomerService : ICustomerService
@@ -15,24 +14,13 @@ namespace AirBnB.Services
             _mapper = mapper;
         }
 
-        public async Task<CustomerResponseDTO> CreateCustomer(CustomerRequestDTO customerRequestDTO, CancellationToken cancellationToken)
+        public async Task<Customer> CreateCustomer(Customer customer, CancellationToken cancellationToken)
         {
-            var customerExists = await _customerRepository.GetByEmail(customerRequestDTO.Email, cancellationToken);
-            if (customerExists != null)
-            {
-                return null;
-            }
-
-            Customer customer = new()
-            {
-                Email = customerRequestDTO.Email,
-                FirstName = customerRequestDTO.FirstName,
-                LastName = customerRequestDTO.LastName,
-            };
-
             _customerRepository.Add(customer);
             await _customerRepository.SaveChangesAsync();
-            return _mapper.Map<Customer, CustomerResponseDTO>(customer);
+            return customer;
+
+
         }
 
         public async Task<IEnumerable<CustomerResponseDTO>> GetAllCustomers(CancellationToken cancellationToken)

@@ -29,15 +29,23 @@ namespace AirBnB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ImageDTO>>> GetImages(CancellationToken cancellationToken)
         {
-            var images = await _imageService.GetAllDTOImages(cancellationToken);
-
-            if (images == null)
+            try
             {
-                return NotFound();
+                var images = await _imageService.GetAllDTOImages(cancellationToken);
+
+                if (images == null)
+                {
+                    return NotFound();
+                }
+
+
+                return Ok(images);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get the images, something went wrong: " + e.Message);
             }
 
-
-            return Ok(images);
         }
 
         /// <summary>
@@ -48,13 +56,21 @@ namespace AirBnB.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<Image>>> GetAllImages(CancellationToken cancellationToken)
         {
-            var images = await _imageService.GetAllImages(cancellationToken);
-
-            if (images == null)
+            try
             {
-                return NotFound();
+                var images = await _imageService.GetAllImages(cancellationToken);
+
+                if (images == null)
+                {
+                    return NotFound();
+                }
+                return Ok(images);
             }
-            return Ok(images);
+
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the images, something went wrong: " + e.Message);
+            }
         }
 
         /// <summary>
@@ -66,14 +82,22 @@ namespace AirBnB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Image>> GetImage(int id, CancellationToken cancellationToken)
         {
-            var image = await _imageService.GetSpecificImage(id, cancellationToken);
-
-            if (image == null)
+            try
             {
-                return NotFound();
+                var image = await _imageService.GetSpecificImage(id, cancellationToken);
+
+                if (image == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(image);
             }
 
-            return Ok(image);
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get the image, something went wrong: " + e.Message);
+            }
         }
 
 

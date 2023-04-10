@@ -1,5 +1,6 @@
 ﻿using AirBnB.Interfaces;
 using AirBnB.Models;
+using AirBnB.Models.DTO;
 using AutoMapper;
 
 namespace AirBnB.Services
@@ -8,25 +9,74 @@ namespace AirBnB.Services
     {
 
         private readonly IReservationRepository _reservationRepository;
-
+        private readonly ILocationService _locationService;
+        private readonly ICustomerService _customerService;
         private readonly IMapper _mapper;
 
-        public ReservationService(IReservationRepository reservationRepository, IMapper mapper)
+        public ReservationService(IReservationRepository reservationRepository, ILocationService locationService, ICustomerService customerService, IMapper mapper)
         {
             _mapper = mapper;
+            _locationService = locationService;
+            _customerService = customerService;
             _reservationRepository = reservationRepository;
         }
-        public bool CreateReservation(Reservation reservation, CancellationToken cancellationToken)
+        public async Task<ReservationResponseDTO> CreateReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellationToken)
         {
-            try
+            var customer = await _customerService.GetCustomerByEmail(reservationRequestDTO.Email, cancellationToken);
+            var location = await GetLocationById(reservationRequestDTO.LocationId, cancellationToken);
+
+            if (customer == null)
             {
-                _reservationRepository.Add(reservation, cancellationToken);
-                return true;
+                await _customerService.CreateCustomer(new Customer
+                {
+                    Email = reservationRequestDTO.Email,
+                    FirstName = reservationRequestDTO.FirstName,
+                    LastName = reservationRequestDTO.LastName,
+                }, cancellationToken);
+
+                await _customerService.SaveChangesAsync();
             }
-            catch
+
+            var unAvailableDates = await _locationService.GetUnAvailableDates(reservationRequestDTO.LocationId, cancellationToken);
+
+            // if the end- or startdate is in the unavailable dates, return badrequest
+            foreach (var date in unAvailableDates.UnAvailableDates)
             {
-                return false;
+                if (reservationRequestDTO.StartDate >= date && reservationRequestDTO.StartDate <= date)
+                {
+                    throw new InvalidOperationException("The location is not available for the selected dates");
+                }
+                if (reservationRequestDTO.EndDate >= date && reservationRequestDTO.EndDate <= date)
+                {
+                    throw new InvalidOperationException("The location is not available for the selected dates");
+                }
             }
+
+            var reservation = new Reservation
+            {
+                StartDate = reservationRequestDTO.StartDate,
+                EndDate = reservationRequestDTO.EndDate,
+                Discount = reservationRequestDTO.Discount ??= 0,
+                Customer = customer,
+                Location = location
+            };
+
+            _reservationRepository.Add(reservation, cancellationToken);
+            await _reservationRepository.SaveChangesAsync();
+
+            //I calculated the price here for the total of days the customer is staying
+            var price = location.PricePerDay * (reservation.EndDate - reservation.StartDate).Days;
+
+            var response = new ReservationResponseDTO
+            {
+                LocationName = location.Title,
+                CustomerName = customer.FirstName + " " + customer.LastName,
+                Price = price,
+                Discount = reservation.Discount,
+            };
+
+            return response;
+
         }
 
         public async Task<IEnumerable<Reservation>> GetAllReservations(CancellationToken cancellationToken)

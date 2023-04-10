@@ -24,14 +24,22 @@ namespace AirBnB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers(CancellationToken cancellationToken)
         {
-            var customers = await _customerService.GetAllCustomers(cancellationToken);
-
-            if (customers == null)
+            try
             {
-                return NotFound();
+                var customers = await _customerService.GetAllCustomers(cancellationToken);
+
+                if (customers == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(customers);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
             }
 
-            return Ok(customers);
         }
 
         /// <summary>
@@ -43,14 +51,21 @@ namespace AirBnB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id, CancellationToken cancellationToken)
         {
-            var customer = await _customerService.GetCustomerById(id, cancellationToken);
-
-            if (customer == null)
+            try
             {
-                return NotFound();
-            }
+                var customer = await _customerService.GetCustomerById(id, cancellationToken);
 
-            return customer;
+                if (customer == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(customer);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While getting the customer, something went wrong: " + e.Message);
+            }
         }
 
         /// <summary>
@@ -61,12 +76,25 @@ namespace AirBnB.Controllers
         [HttpPost]
         public async Task<ActionResult<CustomerResponseDTO>> PostCustomer(CustomerRequestDTO customerRequestDTO, CancellationToken cancellationToken)
         {
+            try
+            {
+                var customerData = new Customer
+                {
+                    Email = customerRequestDTO.Email,
+                    FirstName = customerRequestDTO.FirstName,
+                    LastName = customerRequestDTO.LastName,
+                };
 
+                var customer = await _customerService.CreateCustomer(customerData, cancellationToken);
+                await _customerService.SaveChangesAsync();
 
-            var customer = await _customerService.CreateCustomer(customerRequestDTO, cancellationToken);
-            await _customerService.SaveChangesAsync();
+                return Ok(customer);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to add the customer, something went wrong: " + e.Message);
+            }
 
-            return Ok(customer);
         }
 
 

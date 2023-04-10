@@ -8,7 +8,7 @@ namespace AirBnB.Services
         public Task<IEnumerable<CustomerResponseDTO>> GetAllCustomers(CancellationToken cancellationToken);
         public Task<Customer> GetCustomerById(int id, CancellationToken cancellationToken);
         public Task<Customer> GetCustomerByEmail(string email, CancellationToken cancellationToken);
-        public Task<CustomerResponseDTO> CreateCustomer(CustomerRequestDTO customerRequestDTO, CancellationToken cancellationToken);
+        public Task<Customer> CreateCustomer(Customer customer, CancellationToken cancellationToken);
         public Task SaveChangesAsync();
     }
 }

@@ -35,14 +35,24 @@ namespace AirBnB.Controllers
         [Route("UnavailableDates/{locationId}")]
         public async Task<ActionResult<IEnumerable<UnAvailableDatesDTO>>> GetUnavailableDates(int locationId, CancellationToken cancellationToken)
         {
-            var unavailableDates = await _locationService.GetUnAvailableDates(locationId, cancellationToken);
 
-            if (unavailableDates == null)
+            try
             {
-                return NotFound();
+                var unavailableDates = await _locationService.GetUnAvailableDates(locationId, cancellationToken);
+
+                if (unavailableDates == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(unavailableDates);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the unavailable dates, something went wrong: " + e.Message);
             }
 
-            return Ok(unavailableDates);
+
         }
 
 
@@ -55,14 +65,22 @@ namespace AirBnB.Controllers
         [Route("GetMaxPrice")]
         public async Task<ActionResult<int>> GetMaxPrice(CancellationToken cancellationToken)
         {
-            var maxPrice = await _locationService.GetMaxPrice(cancellationToken);
-
-            if (maxPrice == null)
+            try
             {
-                return NotFound();
+                var maxPrice = await _locationService.GetMaxPrice(cancellationToken);
+
+                if (maxPrice == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(maxPrice);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the unavailable dates, something went wrong: " + e.Message);
             }
 
-            return Ok(maxPrice);
 
 
         }
@@ -77,17 +95,24 @@ namespace AirBnB.Controllers
         [Route("GetDetails/{locationId}")]
         public async Task<ActionResult<LocationDetailDTO>> GetDetails(int locationId, CancellationToken cancellation)
         {
-            //get the location with the id from the URL
-
-            var location = await _locationService.GetDetails(locationId, cancellation);
-
-            if (location == null)
+            try
             {
-                return NotFound();
+                var location = await _locationService.GetDetails(locationId, cancellation);
+
+                if (location == null)
+                {
+                    return NotFound();
+                }
+
+
+                return Ok(location);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the detals of the location, something went wrong: " + e.Message);
             }
 
 
-            return Ok(location);
         }
 
         /// <summary>
@@ -101,15 +126,22 @@ namespace AirBnB.Controllers
         public async Task<ActionResult<IEnumerable<LocationDTOv2>>> Search(
             [FromBody(EmptyBodyBehavior = EmptyBodyBehavior.Allow)] SearchDTO? searchDTO, CancellationToken cancellationToken)
         {
-
-            var locations = await _locationService.SearchLocations(searchDTO, cancellationToken);
-
-            if (locations == null)
+            try
             {
-                return NotFound();
+                var locations = await _locationService.SearchLocations(searchDTO, cancellationToken);
+
+                if (locations == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(locations);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the filtered locations, something went wrong: " + e.Message);
             }
 
-            return Ok(locations);
         }
 
         /// <summary>
@@ -120,15 +152,21 @@ namespace AirBnB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LocationDTO>>> GetLocations(CancellationToken cancellationToken)
         {
-
-            var locations = await _locationService.GetDTOLocations(cancellationToken);
-
-            if (locations == null)
+            try
             {
-                return NotFound();
-            }
+                var locations = await _locationService.GetDTOLocations(cancellationToken);
 
-            return Ok(locations);
+                if (locations == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(locations);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the locations, something went wrong: " + e.Message);
+            }
         }
 
         /// <summary>
@@ -139,14 +177,23 @@ namespace AirBnB.Controllers
         [HttpGet("GetAll")]
         public async Task<ActionResult<IEnumerable<Location>>> GetAllLocations(CancellationToken cancellationToken)
         {
-            var locations = await _locationService.GetAllLocations(cancellationToken);
-
-            if (locations == null)
+            try
             {
-                return NotFound();
+                var locations = await _locationService.GetAllLocations(cancellationToken);
+
+                if (locations == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(locations);
+
             }
 
-            return Ok(locations);
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the locations, something went wrong: " + e.Message);
+            }
 
         }
 
@@ -159,14 +206,21 @@ namespace AirBnB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Location>> GetLocation(int id, CancellationToken cancellationToken)
         {
-            var location = await _locationService.GetSpecificLocation(id, cancellationToken);
-
-            if (location == null)
+            try
             {
-                return NotFound();
-            }
+                var location = await _locationService.GetSpecificLocation(id, cancellationToken);
 
-            return Ok(location);
+                if (location == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(location);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get a locations, something went wrong: " + e.Message);
+            }
         }
 
     }

@@ -30,8 +30,17 @@ namespace AirBnB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(CancellationToken cancellationTokens)
         {
-            var reservations = await _reservationService.GetAllReservations(cancellationTokens);
-            return Ok(reservations);
+            try
+            {
+                var reservations = await _reservationService.GetAllReservations(cancellationTokens);
+                return Ok(reservations);
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While getting the reservation, something went wrong: " + e.Message);
+            }
+
+
         }
 
         /// <summary>
@@ -43,14 +52,24 @@ namespace AirBnB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> GetReservation(int id, CancellationToken cancellationToken)
         {
-            var reservation = await _reservationService.GetSpecificReservation(id, cancellationToken);
 
-            if (reservation == null)
+            try
             {
-                return NotFound();
-            }
 
-            return reservation;
+                var reservation = await _reservationService.GetSpecificReservation(id, cancellationToken);
+
+                if (reservation == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(reservation);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While getting the reservation, something went wrong: " + e.Message);
+            }
         }
 
 
@@ -74,78 +93,22 @@ namespace AirBnB.Controllers
         [HttpPost]
         public async Task<ActionResult<ReservationResponseDTO>> PostReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellationToken)
         {
-            //get customer by email
-            var customer = await _customerService.GetCustomerByEmail(reservationRequestDTO.Email, cancellationToken);
-
-            var location = await _reservationService.GetLocationById(reservationRequestDTO.LocationId, cancellationToken);
-
-            // if customer doesn't exist, create new customer
-            if (customer == null)
-            {
-                var customerDTO = _mapper.Map<Customer, CustomerRequestDTO>(customer);
-
-                await _customerService.CreateCustomer(customerDTO, cancellationToken);
-                await _customerService.SaveChangesAsync();
-            }
-
-            var unAvailable = await _locationService.GetUnAvailableDates(reservationRequestDTO.LocationId, cancellationToken);
-
-            foreach (var date in unAvailable.UnAvailableDates)
-            {
-                // if the startdate is between the unavailable dates, return badrequest
-                if (reservationRequestDTO.StartDate >= date && reservationRequestDTO.StartDate <= date)
-                {
-                    return BadRequest("Location is not available on this date");
-                }
-
-                // if the enddate is between the unavailable dates, return badrequest
-                if (reservationRequestDTO.EndDate >= date && reservationRequestDTO.EndDate <= date)
-                {
-                    return BadRequest("Location is not available on this date");
-                }
-            }
-
-
-            var reservation = new Reservation
-            {
-                StartDate = reservationRequestDTO.StartDate,
-                EndDate = reservationRequestDTO.EndDate,
-                Discount = reservationRequestDTO.Discount ??= 0,
-                Customer = customer,
-                Location = location
-            };
-
-            if (reservation.StartDate < DateTime.Now || reservation.EndDate < DateTime.Now)
-            {
-                return BadRequest("Start and end date must be in the future");
-            }
-
-            if (reservation.StartDate > reservation.EndDate)
-            {
-                return BadRequest("Start date must be before end date");
-            }
+            ReservationResponseDTO reservationResponseDTO;
 
             try
             {
-                _reservationService.CreateReservation(reservation, cancellationToken);
-                await _reservationService.SaveChangesAsync();
-                var price = location.PricePerDay * (reservation.EndDate - reservation.StartDate).Days;
-
-
-                var response = new ReservationResponseDTO
-                {
-                    LocationName = location.Title,
-                    CustomerName = customer.FirstName + " " + customer.LastName,
-                    Price = price,
-                    Discount = reservation.Discount
-                };
-
-                return Ok(response);
+                reservationResponseDTO = await _reservationService.CreateReservation(reservationRequestDTO, cancellationToken);
+            }
+            catch (InvalidOperationException e)
+            {
+                return Conflict("Er was een conflict: " + e.Message);
             }
             catch (Exception)
             {
                 return BadRequest("While posting your reservation, something went wrong");
             }
+
+            return Ok(reservationResponseDTO);
         }
 
     }

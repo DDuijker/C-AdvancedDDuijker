@@ -1,4 +1,5 @@
 ﻿using AirBnB.Models;
+using AirBnB.Models.DTO;
 
 namespace AirBnB.Services
 {
@@ -8,7 +9,7 @@ namespace AirBnB.Services
         public Task<IEnumerable<Reservation>> GetAllReservations(CancellationToken cancellationToken);
         public Task<Reservation> GetSpecificReservation(int reservationId, CancellationToken cancellationToken);
 
-        public bool CreateReservation(Reservation reservation, CancellationToken cancellationToken);
+        public Task<ReservationResponseDTO> CreateReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellationToken);
         public Task SaveChangesAsync();
     }
 }
