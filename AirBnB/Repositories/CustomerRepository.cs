@@ -15,6 +15,10 @@ namespace AirBnB.Repositories
         public void Add(Customer customer)
         {
             _context.Customers.Add(customer);
+
+            _context.SaveChanges();
+
+
         }
         public void Delete(int id)
         {

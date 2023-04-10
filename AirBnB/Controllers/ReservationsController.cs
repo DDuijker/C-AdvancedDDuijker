@@ -91,6 +91,7 @@ namespace AirBnB.Controllers
                 };
 
                 _customerRepository.Add(customer);
+                await _customerRepository.SaveChangesAsync();
             }
 
             var unAvailable = await _locationService.GetUnAvailableDates(reservationRequestDTO.LocationId, cancellation);
