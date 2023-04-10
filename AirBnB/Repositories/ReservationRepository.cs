@@ -13,11 +13,6 @@
             _context = context;
         }
 
-        public async Task<Customer> GetCustomerByEmail(string email, CancellationToken cancellationToken)
-        {
-            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email, cancellationToken);
-            return customer;
-        }
 
         public async Task<Location> GetLocationById(int id, CancellationToken cancellationToken)
         {

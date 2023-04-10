@@ -1,8 +1,10 @@
 ﻿namespace AirBnB.Interfaces
 {
     using AirBnB.Models;
+
     public interface ICustomerRepository
     {
+        public Task<Customer> GetByEmail(string email, CancellationToken cancellationToken);
         public Task<IEnumerable<Customer>> GetAll(CancellationToken cancellationToken);
         public Task<Customer> GetById(int id, CancellationToken cancellationToken);
         public void Add(Customer customer);

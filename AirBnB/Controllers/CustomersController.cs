@@ -1,7 +1,7 @@
-﻿using AirBnB.Interfaces;
-using AirBnB.Models;
+﻿using AirBnB.Models;
+using AirBnB.Models.DTO;
+using AirBnB.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AirBnB.Controllers
 {
@@ -9,11 +9,11 @@ namespace AirBnB.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerService _customerService;
 
-        public CustomersController(ICustomerRepository customerRepository)
+        public CustomersController(ICustomerService customerService)
         {
-            _customerRepository = customerRepository;
+            _customerService = customerService;
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace AirBnB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Customer>>> GetCustomers(CancellationToken cancellationToken)
         {
-            var customers = await _customerRepository.GetAll(cancellationToken);
+            var customers = await _customerService.GetAllCustomers(cancellationToken);
 
             if (customers == null)
             {
@@ -43,7 +43,7 @@ namespace AirBnB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Customer>> GetCustomer(int id, CancellationToken cancellationToken)
         {
-            var customer = await _customerRepository.GetById(id, cancellationToken);
+            var customer = await _customerService.GetCustomerById(id, cancellationToken);
 
             if (customer == null)
             {
@@ -54,87 +54,21 @@ namespace AirBnB.Controllers
         }
 
         /// <summary>
-        /// Update a customer
-        /// </summary>
-        /// <param name="id">The id of the customer you want to update</param>
-        /// <param name="customer">The data of the user you want to update</param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <returns>Nothing</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCustomer(int id, Customer customer, CancellationToken cancellationToken)
-        {
-            if (id != customer.Id)
-            {
-                return BadRequest();
-            }
-
-            _customerRepository.Add(customer);
-
-            try
-            {
-                await _customerRepository.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!CustomerExists(id, cancellationToken))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
-
-        /// <summary>
         /// Create a new customer
         /// </summary>
         /// <param name="customer">The customer data</param>
         /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpPost]
-        public async Task<ActionResult<Customer>> PostCustomer(Customer customer)
+        public async Task<ActionResult<CustomerResponseDTO>> PostCustomer(CustomerRequestDTO customerRequestDTO, CancellationToken cancellationToken)
         {
 
 
-            _customerRepository.Add(customer);
-            await _customerRepository.SaveChangesAsync();
+            var customer = await _customerService.CreateCustomer(customerRequestDTO, cancellationToken);
+            await _customerService.SaveChangesAsync();
 
-            return CreatedAtAction("GetCustomer", new { id = customer.Id }, customer);
+            return Ok(customer);
         }
 
-        /// <summary>
-        /// Delete a customer
-        /// </summary>
-        /// <param name="id">The ID of the customer to delete</param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <returns>An IActionResult representing the result of the operation</returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCustomer(int id, CancellationToken cancellationToken)
-        {
-            var customer = await _customerRepository.GetById(id, cancellationToken);
-            if (customer == null)
-            {
-                return NotFound();
-            }
 
-            _customerRepository.Delete(id);
-            await _customerRepository.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        /// <summary>
-        /// Check if customer exists
-        /// </summary>
-        /// <param name="id">The ID of the customer to check</param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <returns>A true or false</returns>
-        private bool CustomerExists(int id, CancellationToken cancellationToken)
-        {
-            return _customerRepository.GetById(id, cancellationToken) != null;
-        }
     }
 }

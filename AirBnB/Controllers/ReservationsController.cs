@@ -1,5 +1,4 @@
-﻿using AirBnB.Interfaces;
-using AirBnB.Models;
+﻿using AirBnB.Models;
 using AirBnB.Models.DTO;
 using AirBnB.Services;
 using AutoMapper;
@@ -12,13 +11,13 @@ namespace AirBnB.Controllers
     public class ReservationsController : ControllerBase
     {
         private readonly IReservationService _reservationService;
-        private readonly ICustomerRepository _customerRepository;
+        private readonly ICustomerService _customerService;
         private readonly ILocationService _locationService;
         private readonly IMapper _mapper;
-        public ReservationsController(IReservationService reservation, ICustomerRepository customerRepository, ILocationService locationService, IMapper mapper)
+        public ReservationsController(IReservationService reservation, ICustomerService customerService, ILocationService locationService, IMapper mapper)
         {
             _reservationService = reservation;
-            _customerRepository = customerRepository;
+            _customerService = customerService;
             _locationService = locationService;
             _mapper = mapper;
         }
@@ -26,7 +25,7 @@ namespace AirBnB.Controllers
         /// <summary>
         /// Get all reservations
         /// </summary>
-        /// <param name="cancellationTokens">The cancellation token</param>
+        /// <param name="cancellationTokens">The cancellationToken token</param>
         /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(CancellationToken cancellationTokens)
@@ -39,7 +38,7 @@ namespace AirBnB.Controllers
         /// Get a specific reservation by the id
         /// </summary>
         /// <param name="id">The ID of the reservation</param>
-        /// <param name="cancellationToken">The cancellation token</param>
+        /// <param name="cancellationToken">The cancellationToken token</param>
         /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> GetReservation(int id, CancellationToken cancellationToken)
@@ -70,31 +69,26 @@ namespace AirBnB.Controllers
         ///"LastName": string
         ///  }
         /// </param>
-        /// <param name="cancellation"></param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         [HttpPost]
-        public async Task<ActionResult<ReservationResponseDTO>> PostReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellation)
+        public async Task<ActionResult<ReservationResponseDTO>> PostReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellationToken)
         {
             //get customer by email
-            var customer = await _reservationService.GetCustomerByEmail(reservationRequestDTO.Email, cancellation);
+            var customer = await _customerService.GetCustomerByEmail(reservationRequestDTO.Email, cancellationToken);
 
-            var location = await _reservationService.GetLocationById(reservationRequestDTO.LocationId, cancellation);
+            var location = await _reservationService.GetLocationById(reservationRequestDTO.LocationId, cancellationToken);
 
             // if customer doesn't exist, create new customer
             if (customer == null)
             {
-                customer = new Customer
-                {
-                    Email = reservationRequestDTO.Email,
-                    FirstName = reservationRequestDTO.FirstName,
-                    LastName = reservationRequestDTO.LastName
-                };
+                var customerDTO = _mapper.Map<Customer, CustomerRequestDTO>(customer);
 
-                _customerRepository.Add(customer);
-                await _customerRepository.SaveChangesAsync();
+                await _customerService.CreateCustomer(customerDTO, cancellationToken);
+                await _customerService.SaveChangesAsync();
             }
 
-            var unAvailable = await _locationService.GetUnAvailableDates(reservationRequestDTO.LocationId, cancellation);
+            var unAvailable = await _locationService.GetUnAvailableDates(reservationRequestDTO.LocationId, cancellationToken);
 
             foreach (var date in unAvailable.UnAvailableDates)
             {
@@ -133,7 +127,7 @@ namespace AirBnB.Controllers
 
             try
             {
-                _reservationService.CreateReservation(reservation, cancellation);
+                _reservationService.CreateReservation(reservation, cancellationToken);
                 await _reservationService.SaveChangesAsync();
                 var price = location.PricePerDay * (reservation.EndDate - reservation.StartDate).Days;
 

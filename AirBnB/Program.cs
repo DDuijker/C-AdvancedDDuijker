@@ -46,11 +46,11 @@ public class Program
         builder.Services.AddScoped<ILandlordRepository, LandlordRepository>();
         builder.Services.AddScoped<IReservationRepository, ReservationRepository>();
 
-
         //configure services
         builder.Services.AddScoped<ILocationService, LocationService>();
         builder.Services.AddScoped<IImageService, ImageService>();
         builder.Services.AddScoped<IReservationService, ReservationService>();
+        builder.Services.AddScoped<ICustomerService, CustomerService>();
         //prevent circular reference
         builder.Services.AddControllers().AddJsonOptions(options =>
         {

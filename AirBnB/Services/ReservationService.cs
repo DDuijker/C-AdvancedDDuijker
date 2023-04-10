@@ -34,10 +34,6 @@ namespace AirBnB.Services
             return await _reservationRepository.GetAll(cancellationToken);
         }
 
-        public async Task<Customer> GetCustomerByEmail(string email, CancellationToken cancellationToken)
-        {
-            return await _reservationRepository.GetCustomerByEmail(email, cancellationToken);
-        }
 
         public async Task<Location> GetLocationById(int id, CancellationToken cancellationToken)
         {

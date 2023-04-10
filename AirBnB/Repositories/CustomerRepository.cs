@@ -20,6 +20,13 @@ namespace AirBnB.Repositories
 
 
         }
+        public async Task<Customer> GetByEmail(string email, CancellationToken cancellationToken)
+        {
+            var customer = await _context.Customers.FirstOrDefaultAsync(c => c.Email == email, cancellationToken);
+            return customer;
+        }
+
+
         public void Delete(int id)
         {
             var customer = _context.Customers.Find(id);
