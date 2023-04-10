@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AirBnB.Migrations
 {
     [DbContext(typeof(AirBnBContext))]
-    partial class AirBnBContextModelSnapshot : ModelSnapshot
+    [Migration("20230410133759_ChangedSeeding")]
+    partial class ChangedSeeding
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,7 +125,7 @@ namespace AirBnB.Migrations
                         new
                         {
                             Id = 6,
-                            IsCover = false,
+                            IsCover = true,
                             LocationId = 3,
                             Url = "https://images.squarespace-cdn.com/content/v1/5b097b4a4cde7ab1c2125706/90f9b45a-0c57-44b0-a566-53e4359a817e/CathieHong_Bookins_2.jpg?format=300w"
                         },

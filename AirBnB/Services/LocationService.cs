@@ -20,7 +20,6 @@
 
         public async Task<IEnumerable<LocationDTO>> GetDTOLocations(CancellationToken cancellationToken)
         {
-
             var locations = (await _locationRepository.GetAll(cancellationToken));
             return locations.Select(location => _mapper.Map<Location, LocationDTO>(location));
         }
@@ -120,8 +119,8 @@
 
             var unavailableDates = reservations.SelectMany(r =>
                  Enumerable.Range(0, (r.EndDate - r.StartDate).Days + 1)
-                     .Select(i => r.StartDate.AddDays(i))
-             ).ToList();
+                     .Select(i => r.StartDate.AddDays(i))).ToList();
+
 
             // Een automapper was hier overbodig omdat het om 1 veld ging, dus ik heb hier niet overheen gemapped
             return new UnAvailableDatesDTO { UnAvailableDates = unavailableDates };

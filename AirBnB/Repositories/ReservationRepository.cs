@@ -8,8 +8,6 @@
     {
         private readonly AirBnBContext _context;
 
-
-
         public ReservationRepository(AirBnBContext context)
         {
             _context = context;
@@ -27,7 +25,7 @@
             return location;
         }
 
-        public void Add(Reservation reservation)
+        public void Add(Reservation reservation, CancellationToken cancellationToken)
         {
             _context.Reservations.Add(reservation);
         }

@@ -1,8 +1,9 @@
 ﻿using AirBnB.Interfaces;
 using AirBnB.Models;
 using AirBnB.Models.DTO;
+using AirBnB.Services;
+using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace AirBnB.Controllers
 {
@@ -10,11 +11,16 @@ namespace AirBnB.Controllers
     [ApiController]
     public class ReservationsController : ControllerBase
     {
-        private readonly IReservationRepository _reservationRepository;
-
-        public ReservationsController(IReservationRepository repository)
+        private readonly IReservationService _reservationService;
+        private readonly ICustomerRepository _customerRepository;
+        private readonly ILocationService _locationService;
+        private readonly IMapper _mapper;
+        public ReservationsController(IReservationService reservation, ICustomerRepository customerRepository, ILocationService locationService, IMapper mapper)
         {
-            _reservationRepository = repository;
+            _reservationService = reservation;
+            _customerRepository = customerRepository;
+            _locationService = locationService;
+            _mapper = mapper;
         }
 
         /// <summary>
@@ -25,7 +31,7 @@ namespace AirBnB.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Reservation>>> GetReservations(CancellationToken cancellationTokens)
         {
-            var reservations = await _reservationRepository.GetAll(cancellationTokens);
+            var reservations = await _reservationService.GetAllReservations(cancellationTokens);
             return Ok(reservations);
         }
 
@@ -38,7 +44,7 @@ namespace AirBnB.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Reservation>> GetReservation(int id, CancellationToken cancellationToken)
         {
-            var reservation = await _reservationRepository.GetById(id, cancellationToken);
+            var reservation = await _reservationService.GetSpecificReservation(id, cancellationToken);
 
             if (reservation == null)
             {
@@ -48,41 +54,7 @@ namespace AirBnB.Controllers
             return reservation;
         }
 
-        /// <summary>
-        /// Update a reservation
-        /// </summary>
-        /// <param name="id">The id of the reservation you want to edit</param>
-        /// <param name="reservation">The new reservation data</param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <returns>An IActionResult representing the result of the operation</returns>
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutReservation(int id, Reservation reservation, CancellationToken cancellationToken)
-        {
-            if (id != reservation.Id)
-            {
-                return BadRequest();
-            }
 
-            _reservationRepository.Update(reservation);
-
-            try
-            {
-                await _reservationRepository.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!ReservationExists(id, cancellationToken))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         /// <summary>
         /// Check if a reservation exists
@@ -104,9 +76,40 @@ namespace AirBnB.Controllers
         public async Task<ActionResult<ReservationResponseDTO>> PostReservation(ReservationRequestDTO reservationRequestDTO, CancellationToken cancellation)
         {
             //get customer by email
-            var customer = await _reservationRepository.GetCustomerByEmail(reservationRequestDTO.Email, cancellation);
+            var customer = await _reservationService.GetCustomerByEmail(reservationRequestDTO.Email, cancellation);
 
-            var location = await _reservationRepository.GetLocationById(reservationRequestDTO.LocationId, cancellation);
+            var location = await _reservationService.GetLocationById(reservationRequestDTO.LocationId, cancellation);
+
+            // if customer doesn't exist, create new customer
+            if (customer == null)
+            {
+                customer = new Customer
+                {
+                    Email = reservationRequestDTO.Email,
+                    FirstName = reservationRequestDTO.FirstName,
+                    LastName = reservationRequestDTO.LastName
+                };
+
+                _customerRepository.Add(customer);
+            }
+
+            var unAvailable = await _locationService.GetUnAvailableDates(reservationRequestDTO.LocationId, cancellation);
+
+            foreach (var date in unAvailable.UnAvailableDates)
+            {
+                // if the startdate is between the unavailable dates, return badrequest
+                if (reservationRequestDTO.StartDate >= date && reservationRequestDTO.StartDate <= date)
+                {
+                    return BadRequest("Location is not available on this date");
+                }
+
+                // if the enddate is between the unavailable dates, return badrequest
+                if (reservationRequestDTO.EndDate >= date && reservationRequestDTO.EndDate <= date)
+                {
+                    return BadRequest("Location is not available on this date");
+                }
+            }
+
 
             var reservation = new Reservation
             {
@@ -117,54 +120,41 @@ namespace AirBnB.Controllers
                 Location = location
             };
 
-            _reservationRepository.Add(reservation);
-            await _reservationRepository.SaveChangesAsync();
-
-            var price = location.PricePerDay * (reservation.EndDate - reservation.StartDate).Days;
-            var newPrice = price - (price * reservation.Discount / 100);
-
-            var response = new ReservationResponseDTO
+            if (reservation.StartDate < DateTime.Now || reservation.EndDate < DateTime.Now)
             {
-                LocationName = location.Title,
-                CustomerName = customer.FirstName + " " + customer.LastName,
-                Price = newPrice,
-                Discount = reservation.Discount
-            };
-
-            return response;
-        }
-
-
-        /// <summary>
-        /// Delete a reservation
-        /// </summary>
-        /// <param name="id">The id of the reservation you want to delete</param>
-        /// <param name="cancellationtoken">The cancellation token</param>
-        /// <returns>An IActionResult representing the result of the operation</returns>
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteReservation(int id, CancellationToken cancellationtoken)
-        {
-            var reservation = await _reservationRepository.GetById(id, cancellationtoken);
-            if (reservation == null)
-            {
-                return NotFound();
+                return BadRequest("Start and end date must be in the future");
             }
 
-            _reservationRepository.Delete(id);
-            await _reservationRepository.SaveChangesAsync();
+            if (reservation.StartDate > reservation.EndDate)
+            {
+                return BadRequest("Start date must be before end date");
+            }
 
-            return NoContent();
+            try
+            {
+                _reservationService.CreateReservation(reservation, cancellation);
+                await _reservationService.SaveChangesAsync();
+                var price = location.PricePerDay * (reservation.EndDate - reservation.StartDate).Days;
+
+
+                var response = new ReservationResponseDTO
+                {
+                    LocationName = location.Title,
+                    CustomerName = customer.FirstName + " " + customer.LastName,
+                    Price = price,
+                    Discount = reservation.Discount
+                };
+
+                return Ok(response);
+            }
+            catch (Exception)
+            {
+                return BadRequest("While posting your reservation, something went wrong");
+            }
         }
 
-        /// <summary>
-        /// Check if the reservation exists
-        /// </summary>
-        /// <param name="id">the id of the reservation you want to check</param>
-        /// <param name="cancellationToken">The cancellation token</param>
-        /// <returns>An IActionResult representing the result of the operation</returns>
-        private bool ReservationExists(int id, CancellationToken cancellationToken)
-        {
-            return _reservationRepository.GetById(id, cancellationToken) != null;
-        }
     }
+
+
+
 }

@@ -22,6 +22,15 @@ namespace AirBnB.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Retrieves a collection of unavailable dates for a specific location.
+        /// </summary>
+        /// <param name="locationId">The ID of the location for which the unavailable dates are being retrieved.</param>
+        /// <param name="cancellationToken">A token used to cancel the operation if required.</param>
+        /// <returns>
+        /// An HTTP response containing the collection of UnAvailableDatesDTO objects for the specified location ID.
+        /// The method returns a "404 Not Found" response if no unavailable dates are found for the specified location ID.
+        /// </returns>
         [HttpGet]
         [Route("UnavailableDates/{locationId}")]
         public async Task<ActionResult<IEnumerable<UnAvailableDatesDTO>>> GetUnavailableDates(int locationId, CancellationToken cancellationToken)
