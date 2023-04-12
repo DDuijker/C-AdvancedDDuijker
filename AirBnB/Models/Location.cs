@@ -28,26 +28,6 @@
 
         public LocationType LocationType { get; set; }
 
-
-
-        //public Location(int id, string title, int rooms, Landlord landlord, int landlordForeignKeyId, string subTitle, float pricePerDay, int numberOfGuests, Enum features, string description, Enum LocationType, List<Image> images, List<Reservation> reservations)
-        //{
-        //    LocationId = id;
-        //    Title = title;
-        //    Rooms = rooms;
-        //    Landlord = landlord;
-        //    LandlordForeignKeyId = landlordForeignKeyId;
-        //    SubTitle = subTitle;
-        //    PricePerDay = pricePerDay;
-        //    NumberOfGuests = numberOfGuests;
-        //    Features = features;
-        //    Description = description;
-        //    LocationType = type;
-        //    Images = images;
-        //    Reservations = reservations;
-        //}
-
-
     }
 
 }

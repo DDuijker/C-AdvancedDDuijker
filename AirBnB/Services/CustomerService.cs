@@ -23,6 +23,7 @@ namespace AirBnB.Services
 
         }
 
+        //Get all customers in a nice formatted response, custom made
         public async Task<IEnumerable<CustomerResponseDTO>> GetAllCustomers(CancellationToken cancellationToken)
         {
             var customers = await _customerRepository.GetAll(cancellationToken);

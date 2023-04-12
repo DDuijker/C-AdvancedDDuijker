@@ -272,3 +272,5 @@ C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bi
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
 C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\bin\Debug\net6.0\AirBnB.xml
+C:\Users\Djoek\Documents\Windesheim jaar 2\CSharpAdvanced\Eindopdracht\AirBnB\obj\Debug\net6.0\AirBnB.xml

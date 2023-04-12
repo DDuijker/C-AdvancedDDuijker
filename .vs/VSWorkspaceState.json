@@ -1,4 +1,10 @@
 {
-  "ExpandedNodes": [],
+  "ExpandedNodes": [
+    "",
+    "\\AirBnB",
+    "\\AirBnB\\Controllers",
+    "\\WebApplication"
+  ],
+  "SelectedNode": "\\AirBnB\\Controllers\\LocationsController.cs",
   "PreviewInSolutionExplorer": false
 }

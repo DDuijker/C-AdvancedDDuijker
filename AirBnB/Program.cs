@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Mvc.ApiExplorer;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 using System.Text.Json.Serialization;
 
 public class Program
@@ -37,6 +38,9 @@ public class Program
         {
             options.SwaggerDoc("v1", new OpenApiInfo { Title = "AirBnB API", Version = "v1" });
             options.SwaggerDoc("v2", new OpenApiInfo { Title = "AirBnB API", Version = "v2" });
+            var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+            var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+            options.IncludeXmlComments(xmlPath);
         });
         builder.Services.ConfigureOptions<ConfigureSwaggerOptions>();
         //configure repositories
