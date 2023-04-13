@@ -1,10 +1,14 @@
-﻿namespace AirBnB.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AirBnB.Models
 {
     public class Landlord
     {
         public int Id { get; set; }
+        [Required]
         public string FirstName { get; set; }
 
+        [Required]
         public string LastName { get; set; }
 
         public int Age { get; set; }

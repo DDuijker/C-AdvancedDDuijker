@@ -22,7 +22,7 @@ namespace AirBnB.Controllers
         }
 
         /// <summary>
-        /// Get all images 
+        /// Get all images with ImageDTO response
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>An IActionResult representing the result of the operation</returns>

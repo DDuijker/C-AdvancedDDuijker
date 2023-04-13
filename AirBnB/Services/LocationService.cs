@@ -92,6 +92,7 @@
             //Filter through the locations for the largest price
             var price = locations.Max(l => l.PricePerDay);
 
+            //I used Math.Floor to round down the price to the nearest integerS
             var maxPrice = (int)Math.Floor(price);
 
             var response = new PriceDTO { Price = (int)price };
@@ -101,11 +102,29 @@
 
         public async Task<LocationDetailDTO> GetDetails(int id, CancellationToken cancellation)
         {
-            var location = await _locationRepository.GetById(id, cancellation);
+            try
+            {
+                if (id <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(id), "Location id must be a positive integer");
+                }
 
-            var mappedLocation = _mapper.Map<Location, LocationDetailDTO>(location);
+                if (id == null)
+                {
+                    throw new ArgumentException($"Location with ID {id} does not exist.", nameof(id));
+                }
 
-            return mappedLocation;
+                var location = await _locationRepository.GetById(id, cancellation);
+
+                var mappedLocation = _mapper.Map<Location, LocationDetailDTO>(location);
+
+                return mappedLocation;
+            }
+            catch (Exception e)
+            {
+                throw new Exception("While trying to get the details of the location, something went wrong", e);
+            }
+
         }
 
 
@@ -117,6 +136,7 @@
 
             var reservations = location.Reservations;
 
+            //I used a linq query to get all the dates between the start and end date of the reservation
             var unavailableDates = reservations.SelectMany(r =>
                  Enumerable.Range(0, (r.EndDate - r.StartDate).Days + 1)
                      .Select(i => r.StartDate.AddDays(i))).ToList();

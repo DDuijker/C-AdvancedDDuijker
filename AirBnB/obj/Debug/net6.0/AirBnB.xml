@@ -6,7 +6,7 @@
     <members>
         <member name="M:AirBnB.Controllers.CustomersController.GetCustomers(System.Threading.CancellationToken)">
             <summary>
-            Get all customers
+            Get all customers, via CustomerResponseDTO
             </summary>
             <param name="cancellationToken">The cancellation token</param>
             <returns>An IActionResult with an IEnumerable list of the customers</returns>
@@ -28,7 +28,7 @@
         </member>
         <member name="M:AirBnB.Controllers.ImagesController.GetImages(System.Threading.CancellationToken)">
             <summary>
-            Get all images 
+            Get all images with ImageDTO response
             </summary>
             <param name="cancellationToken">The cancellation token</param>
             <returns>An IActionResult representing the result of the operation</returns>

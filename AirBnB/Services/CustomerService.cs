@@ -16,9 +16,22 @@ namespace AirBnB.Services
 
         public async Task<Customer> CreateCustomer(Customer customer, CancellationToken cancellationToken)
         {
-            _customerRepository.Add(customer);
-            await _customerRepository.SaveChangesAsync();
-            return customer;
+            try
+            {
+                if (customer == null)
+                {
+                    throw new ArgumentNullException(nameof(customer), "Customer object cannot be null.");
+                }
+                _customerRepository.Add(customer);
+                await _customerRepository.SaveChangesAsync();
+                return customer;
+
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while creating the customer.", e);
+            }
+
 
 
         }
@@ -41,9 +54,27 @@ namespace AirBnB.Services
 
         public async Task<Customer> GetCustomerById(int id, CancellationToken cancellationToken)
         {
-            var customer = await _customerRepository.GetById(id, cancellationToken);
-            return customer;
+            try
+            {
+                if (id <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(id), "Customer ID must be a positive integer.");
+                }
 
+                var customer = await _customerRepository.GetById(id, cancellationToken);
+
+                if (customer == null)
+                {
+                    throw new ArgumentException($"Customer with ID {id} does not exist.", nameof(id));
+                }
+
+                return customer;
+            }
+            catch (Exception ex)
+            {
+                // Log the error message here or throw a custom exception if needed.
+                throw new Exception("An error occurred while getting the customer by ID.", ex);
+            }
         }
 
         public async Task SaveChangesAsync()

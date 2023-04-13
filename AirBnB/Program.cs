@@ -55,6 +55,7 @@ public class Program
         builder.Services.AddScoped<IImageService, ImageService>();
         builder.Services.AddScoped<IReservationService, ReservationService>();
         builder.Services.AddScoped<ICustomerService, CustomerService>();
+
         //prevent circular reference
         builder.Services.AddControllers().AddJsonOptions(options =>
         {

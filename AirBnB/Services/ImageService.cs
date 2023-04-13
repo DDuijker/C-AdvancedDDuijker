@@ -17,7 +17,15 @@ namespace AirBnB.Services
         }
         public async Task<IEnumerable<ImageDTO>> GetAllDTOImages(CancellationToken cancellationToken)
         {
-            return (await _imageRepository.GetAll(cancellationToken)).Select(image => _mapper.Map<Image, ImageDTO>(image));
+            try
+            {
+                return (await _imageRepository.GetAll(cancellationToken)).Select(image => _mapper.Map<Image, ImageDTO>(image));
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while getting all DTO images.", e);
+            }
+
         }
 
         public async Task<IEnumerable<Image>> GetAllImages(CancellationToken cancellationToken)
@@ -27,7 +35,27 @@ namespace AirBnB.Services
 
         public async Task<Image> GetSpecificImage(int imageId, CancellationToken cancellationToken)
         {
-            return await _imageRepository.GetById(imageId, cancellationToken);
+            try
+            {
+                if (imageId <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(imageId), "Image ID must be a positive integer.");
+                }
+
+                var image = await _imageRepository.GetById(imageId, cancellationToken);
+
+                if (image == null)
+                {
+                    throw new ArgumentException($"Image with ID {imageId} does not exist.", nameof(imageId));
+                }
+
+                return image;
+            }
+            catch (Exception ex)
+            {
+                // Log the error message here or throw a custom exception if needed.
+                throw new Exception("An error occurred while getting the specific image.", ex);
+            }
         }
     }
 }

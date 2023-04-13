@@ -2,6 +2,7 @@
 using AirBnB.Models.DTO;
 using AirBnB.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AirBnB.Controllers
 {
@@ -17,7 +18,7 @@ namespace AirBnB.Controllers
         }
 
         /// <summary>
-        /// Get all customers
+        /// Get all customers, via CustomerResponseDTO
         /// </summary>
         /// <param name="cancellationToken">The cancellation token</param>
         /// <returns>An IActionResult with an IEnumerable list of the customers</returns>
@@ -89,6 +90,10 @@ namespace AirBnB.Controllers
                 await _customerService.SaveChangesAsync();
 
                 return Ok(customer);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (Exception e)
             {

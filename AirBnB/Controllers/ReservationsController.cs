@@ -3,6 +3,7 @@ using AirBnB.Models.DTO;
 using AirBnB.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.ComponentModel.DataAnnotations;
 
 namespace AirBnB.Controllers
 {
@@ -98,6 +99,10 @@ namespace AirBnB.Controllers
             try
             {
                 reservationResponseDTO = await _reservationService.CreateReservation(reservationRequestDTO, cancellationToken);
+            }
+            catch (ValidationException ex)
+            {
+                return BadRequest(ex.Message);
             }
             catch (InvalidOperationException e)
             {
