@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
+﻿using AirBnB.Interfaces;
 using AirBnB.Models;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AirBnB.Controllers
 {
@@ -13,95 +8,61 @@ namespace AirBnB.Controllers
     [ApiController]
     public class LandlordsController : ControllerBase
     {
-        private readonly AirbnbContext _context;
+        private readonly ILandlordRepository _landlordRepository;
 
-        public LandlordsController(AirbnbContext context)
+        public LandlordsController(ILandlordRepository repository)
         {
-            _context = context;
+            _landlordRepository = repository;
         }
 
-        // GET: api/Landlords
+        /// <summary>
+        /// Get all landlords
+        /// </summary>
+        /// <param name="cancellationToken">The cancellation token</param>
+        /// <returns>An IActionResult representing the result of the operation</returns>
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlords()
+        public async Task<ActionResult<IEnumerable<Landlord>>> GetLandlords(CancellationToken cancellationToken)
         {
-            return await _context.Landlords.ToListAsync();
-        }
-
-        // GET: api/Landlords/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Landlord>> GetLandlord(int id)
-        {
-            var landlord = await _context.Landlords.FindAsync(id);
-
-            if (landlord == null)
-            {
-                return NotFound();
-            }
-
-            return landlord;
-        }
-
-        // PUT: api/Landlords/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutLandlord(int id, Landlord landlord)
-        {
-            if (id != landlord.LandlordId)
-            {
-                return BadRequest();
-            }
-
-            _context.Entry(landlord).State = EntityState.Modified;
-
             try
             {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!LandlordExists(id))
+                var result = await _landlordRepository.GetAll(cancellationToken);
+                if (result == null)
                 {
                     return NotFound();
                 }
-                else
-                {
-                    throw;
-                }
+                return Ok(result);
             }
-
-            return NoContent();
-        }
-
-        // POST: api/Landlords
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPost]
-        public async Task<ActionResult<Landlord>> PostLandlord(Landlord landlord)
-        {
-            _context.Landlords.Add(landlord);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction("GetLandlord", new { id = landlord.LandlordId }, landlord);
-        }
-
-        // DELETE: api/Landlords/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteLandlord(int id)
-        {
-            var landlord = await _context.Landlords.FindAsync(id);
-            if (landlord == null)
+            catch (Exception e)
             {
-                return NotFound();
+                return BadRequest("While trying to get all the landlords, something went wrong: " + e.Message);
             }
 
-            _context.Landlords.Remove(landlord);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
         }
 
-        private bool LandlordExists(int id)
+        /// <summary>
+        /// Get a landlord by id
+        /// </summary>
+        /// <param name="id">The id of the landlord you want to get</param>
+        /// <param name="cancellationToken">The cancellationtoken</param>
+        /// <returns>The landlord or a notfound error</returns>
+        [HttpGet("{id}")]
+        public async Task<ActionResult<Landlord>> GetLandlord(int id, CancellationToken cancellationToken)
         {
-            return _context.Landlords.Any(e => e.LandlordId == id);
+            try
+            {
+                var landlord = await _landlordRepository.GetById(id, cancellationToken);
+
+                if (landlord == null)
+                {
+                    return NotFound();
+                }
+
+                return landlord;
+            }
+            catch (Exception e)
+            {
+                return BadRequest("While trying to get all the landlords, something went wrong: " + e.Message);
+            }
         }
     }
 }

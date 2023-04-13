@@ -1,0 +1,171 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AirBnB</name>
+    </assembly>
+    <members>
+        <member name="M:AirBnB.Controllers.CustomersController.GetCustomers(System.Threading.CancellationToken)">
+            <summary>
+            Get all customers, via CustomerResponseDTO
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult with an IEnumerable list of the customers</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.CustomersController.GetCustomer(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a specific customer
+            </summary>
+            <param name="id">The id of the specific customer</param>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>The customer with the corresponding id</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.CustomersController.PostCustomer(AirBnB.Models.DTO.CustomerRequestDTO,System.Threading.CancellationToken)">
+            <summary>
+            Create a new customer
+            </summary>
+            <param name="customer">The customer data</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.ImagesController.GetImages(System.Threading.CancellationToken)">
+            <summary>
+            Get all images with ImageDTO response
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.ImagesController.GetAllImages(System.Threading.CancellationToken)">
+            <summary>
+            Get all the images
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.ImagesController.GetImage(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a specific image
+            </summary>
+            <param name="id">The id of the specific image you want to get</param>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionresult with the result</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LandlordsController.GetLandlords(System.Threading.CancellationToken)">
+            <summary>
+            Get all landlords
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LandlordsController.GetLandlord(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a landlord by id
+            </summary>
+            <param name="id">The id of the landlord you want to get</param>
+            <param name="cancellationToken">The cancellationtoken</param>
+            <returns>The landlord or a notfound error</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.GetUnavailableDates(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Retrieves a collection of unavailable dates for a specific location.
+            </summary>
+            <param name="locationId">The ID of the location for which the unavailable dates are being retrieved.</param>
+            <param name="cancellationToken">A token used to cancel the operation if required.</param>
+            <returns>
+            An HTTP response containing the collection of UnAvailableDatesDTO objects for the specified location ID.
+            The method returns a "404 Not Found" response if no unavailable dates are found for the specified location ID.
+            </returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.GetMaxPrice(System.Threading.CancellationToken)">
+            <summary>
+            Get the highest price of all the locations
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An ActionResult with the result</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.GetDetails(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get all the details of a locations via the LocationDetailDTO, ImageDTO and LandlordDTO
+            </summary>
+            <param name="locationId">The id from the location you want the details from</param>
+            <param name="cancellation">The cancellationtoken</param>
+            <returns>An ActionResult with the result</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.Search(AirBnB.Models.DTO.SearchDTO,System.Threading.CancellationToken)">
+            <summary>
+            Search through te locations and filter through the features of the location
+            </summary>
+            <param name="searchDTO">The location features </param>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An ActionResult with the result</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.GetLocations(System.Threading.CancellationToken)">
+            <summary>
+            Get all locations
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An ActionResult with the result</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.GetAllLocations(System.Threading.CancellationToken)">
+            <summary>
+            Get all locations, with the GetAll route 
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.LocationsController.GetLocation(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a specific location
+            </summary>
+            <param name="id">The id of the location you want to get</param>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.ReservationsController.GetReservations(System.Threading.CancellationToken)">
+            <summary>
+            Get all reservations
+            </summary>
+            <param name="cancellationTokens">The cancellationToken token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.ReservationsController.GetReservation(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a specific reservation by the id
+            </summary>
+            <param name="id">The ID of the reservation</param>
+            <param name="cancellationToken">The cancellationToken token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.ReservationsController.PostReservation(AirBnB.Models.DTO.ReservationRequestDTO,System.Threading.CancellationToken)">
+             <summary>
+             Check if a reservation exists
+             </summary>
+             <param name="reservationRequestDTO">The request in DTO form, as follows:
+             {
+            "StartDate": DateTime,
+            "EndDate": DateTime,
+            "LocationId": int,
+            "Discount": float?, // optioneel
+            "Email": string,
+            "FirstName": string,
+            "LastName": string
+              }
+             </param>
+             <param name="cancellationToken"></param>
+             <returns></returns>
+        </member>
+        <member name="M:AirBnB.Controllers.V2.LocationsController.GetLocations(System.Threading.CancellationToken)">
+            <summary>
+            Get all loations via DTOv2, with added price (per day) and type
+            </summary>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns>An IActionResult representing the result of the operation</returns>
+        </member>
+        <member name="M:AirBnB.Controllers.V2.LocationsController.GetLocation(System.Int32,System.Threading.CancellationToken)">
+            <summary>
+            Get a specific location, mapped to the DTO
+            </summary>
+            <param name="id">the id of the lcoation you want to get</param>
+            <param name="cancellationToken">The cancellation token</param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
